@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Shield } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -30,15 +30,17 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${scrolled ? 'bg-orange-500' : 'bg-white/20 backdrop-blur-sm'}`}>
-            <Shield className={`w-5 h-5 transition-colors duration-300 ${scrolled ? 'text-white' : 'text-white'}`} />
-          </div>
+        <a href="#" className="flex items-center gap-3 group">
+          <img
+            src="/SSI_LOGO_TRANSPARENT.png"
+            alt="Safe Streets Ireland"
+            className="h-10 w-auto transition-all duration-300 group-hover:opacity-80"
+          />
           <div>
-            <span className={`font-extrabold text-base leading-none block transition-colors duration-300 ${scrolled ? 'text-charcoal' : 'text-white'}`}>
+            <span className={`font-black text-base leading-none block transition-colors duration-300 italic ${scrolled ? 'text-charcoal' : 'text-white'}`}>
               Safe Streets
             </span>
-            <span className={`font-semibold text-xs leading-none block transition-colors duration-300 ${scrolled ? 'text-orange-500' : 'text-orange-200'}`}>
+            <span className={`font-bold text-xs leading-none block transition-colors duration-300 italic ${scrolled ? 'text-orange-500' : 'text-orange-300'}`}>
               Ireland
             </span>
           </div>
