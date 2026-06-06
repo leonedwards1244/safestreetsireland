@@ -46,7 +46,7 @@ export default function About() {
             {/* Floating badge */}
             <div className="absolute -bottom-6 -right-4 lg:-right-8 bg-orange-500 text-white rounded-2xl px-6 py-4 shadow-xl">
               <div className="text-3xl font-extrabold">Since</div>
-              <div className="text-xl font-bold">2023</div>
+              <div className="text-xl font-extrabold">2026</div>
             </div>
 
             {/* Accent shape */}
