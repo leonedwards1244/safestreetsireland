@@ -89,10 +89,10 @@ const AMOUNTS = [10, 25, 50, 100, 250];
 function DonateForm({ onClose }: { onClose: () => void }) {
   const [amount, setAmount] = useState<number>(25);
   const [custom, setCustom] = useState('');
-  const [form, setForm] = useState({ name:'', email:'', message:'', anonymous:false });
+  const [form, setForm] = useState({ name:'', email:'' });
   const [state, setState] = useState<FormState>({ loading:false, success:false, error:null });
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }));
 
   const finalAmount = custom ? parseInt(custom, 10) : amount;
@@ -103,19 +103,34 @@ function DonateForm({ onClose }: { onClose: () => void }) {
       setState(s => ({ ...s, error: 'Please enter a valid donation amount.' }));
       return;
     }
+    if (!form.email.trim()) {
+      setState(s => ({ ...s, error: 'Please enter your email address.' }));
+      return;
+    }
     setState({ loading:true, success:false, error:null });
-    const { error } = await supabase.from('donations').insert({
-      donor_name: form.anonymous ? null : (form.name.trim() || null),
-      email: form.email.trim().toLowerCase(),
-      amount_cents: finalAmount * 100,
-      currency: 'EUR',
-      message: form.message.trim() || null,
-      anonymous: form.anonymous,
-    });
-    setState({ loading:false, success:!error, error: error ? 'Something went wrong. Please try again.' : null });
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'payment',
+            amount_cents: finalAmount * 100,
+            guest_email: form.email.trim().toLowerCase(),
+            guest_name: form.name.trim() || undefined,
+            success_url: `${window.location.origin}/success`,
+            cancel_url: `${window.location.origin}/#get-involved`,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to create checkout session');
+      window.location.href = data.url;
+    } catch (err: any) {
+      setState({ loading:false, success:false, error: err.message || 'Something went wrong. Please try again.' });
+    }
   };
-
-  if (state.success) return <SuccessScreen title="Thank You!" message={`Your donation of €${finalAmount} has been recorded. We're deeply grateful for your support.`} onClose={onClose} />;
 
   return (
     <form onSubmit={submit} className="space-y-5">
@@ -148,28 +163,16 @@ function DonateForm({ onClose }: { onClose: () => void }) {
         />
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
-        <Field label="Your Name">
-          <input className="form-input" placeholder="Your name" value={form.name} onChange={set('name')} disabled={form.anonymous} />
+        <Field label="Your Name (optional)">
+          <input className="form-input" placeholder="Your name" value={form.name} onChange={set('name')} />
         </Field>
         <Field label="Email Address" required>
           <input type="email" className="form-input" placeholder="you@email.com" value={form.email} onChange={set('email')} required />
         </Field>
       </div>
-      <Field label="Message (optional)">
-        <textarea className="form-input resize-none" rows={2} placeholder="Leave a message of support..." value={form.message} onChange={set('message')} />
-      </Field>
-      <label className="flex items-center gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={form.anonymous}
-          onChange={e => setForm(f => ({ ...f, anonymous: e.target.checked }))}
-          className="w-4 h-4 rounded accent-orange-500"
-        />
-        <span className="text-sm text-gray-700">Make this donation anonymous</span>
-      </label>
       {state.error && <ErrorAlert message={state.error} />}
       <SubmitButton loading={state.loading} label={`Donate €${finalAmount || '—'} Now`} />
-      <p className="text-center text-xs text-gray-400">Secure donation processing. Your data is protected.</p>
+      <p className="text-center text-xs text-gray-400">You'll be redirected to Stripe's secure checkout. Your data is protected.</p>
     </form>
   );
 }
