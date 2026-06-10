@@ -74,7 +74,7 @@ export default function Newsletter() {
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Supported By</p>
               <div className="flex flex-wrap gap-3">
-                {['Garda Síochána', 'Irish Youth Foundation', 'Tusla', 'An Cosan', 'Youth Work Ireland'].map((org) => (
+                {['Garda Síochána', 'Irish Youth Foundation', 'Black Coalition Ireland', 'Superteam Ireland', 'Youth Work Ireland'].map((org) => (
                   <span key={org} className="bg-gray-50 border border-gray-200 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-full">
                     {org}
                   </span>
