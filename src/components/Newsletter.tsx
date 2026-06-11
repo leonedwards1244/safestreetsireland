@@ -58,8 +58,8 @@ export default function Newsletter() {
             <div className="space-y-5 mb-10">
               {[
                 { icon: Mail, label: 'info@safestreetsireland.ie' },
-                { icon: Phone, label: '+353 1 234 5678' },
-                { icon: MapPin, label: 'Nationwide — Ireland' },
+                { icon: Phone, label: '+353 ' },
+                { icon: MapPin, label: 'Dublin — Ireland' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0">
@@ -74,7 +74,7 @@ export default function Newsletter() {
             <div>
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Supported By</p>
               <div className="flex flex-wrap gap-3">
-                {['Garda Síochána', 'Irish Youth Foundation', 'Black Coalition Ireland', 'Superteam Ireland', 'Youth Work Ireland'].map((org) => (
+                {['Garda Síochána', 'Irish Youth Foundation', 'Black Coalition Ireland', 'Superteam Ireland', 'Youth Work Ireland' , 'Enterprise Ireland' , 'Fundraisely'].map((org) => (
                   <span key={org} className="bg-gray-50 border border-gray-200 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-full">
                     {org}
                   </span>
