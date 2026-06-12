@@ -128,6 +128,22 @@
   overflow: hidden;
 }
 
+/* Infinite marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
 /* Shared form input style */
 .form-input {
   @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all disabled:bg-gray-50 disabled:text-gray-400;

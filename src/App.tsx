@@ -8,6 +8,7 @@ import ImpactBanner from './components/ImpactBanner';
 import GetInvolved from './components/GetInvolved';
 import Stories from './components/Stories';
 import Newsletter from './components/Newsletter';
+import SupportedBy from './components/SupportedBy';
 import Footer from './components/Footer';
 import { SuccessPage } from './pages/SuccessPage';
 
@@ -23,6 +24,7 @@ function LandingPage() {
       <GetInvolved />
       <Stories />
       <Newsletter />
+      <SupportedBy />
       <Footer />
     </div>
   );
