@@ -68,7 +68,7 @@ const supporters: Supporter[] = [
   },
   {
     id: 'doj',
-    name: 'Department of Justice',
+    name: 'Dept. of Justice',
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Coat_of_arms_of_Ireland.svg/200px-Coat_of_arms_of_Ireland.svg.png',
     websiteUrl: 'https://www.gov.ie/justice',
   },
@@ -98,20 +98,22 @@ const supporters: Supporter[] = [
   },
 ];
 
-function LogoCard({ supporter }: { supporter: Supporter }) {
+function SupporterTile({ supporter }: { supporter: Supporter }) {
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = `https://placehold.co/150x80/f3f4f6/9ca3af?text=${encodeURIComponent(supporter.name)}`;
+    e.currentTarget.src = `https://placehold.co/96x48/f3f4f6/9ca3af?text=${encodeURIComponent(supporter.name)}`;
   };
 
-  const inner = (
-    <div className="group relative bg-white border border-gray-100 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 h-28 shadow-sm hover:shadow-md hover:border-orange-200 hover:scale-105 transition-all duration-300 cursor-pointer">
-      <img
-        src={supporter.logoUrl}
-        alt={`${supporter.name} logo`}
-        onError={handleError}
-        className="max-h-12 max-w-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
-      />
-      <span className="text-[10px] font-semibold text-gray-400 group-hover:text-orange-500 text-center leading-tight transition-colors duration-300 line-clamp-2">
+  const content = (
+    <div className="flex flex-col items-center justify-center gap-2.5 px-8 py-1 group">
+      <div className="w-24 h-12 flex items-center justify-center">
+        <img
+          src={supporter.logoUrl}
+          alt={`${supporter.name} logo`}
+          onError={handleError}
+          className="max-h-12 max-w-[96px] w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+        />
+      </div>
+      <span className="text-[11px] font-semibold text-gray-400 group-hover:text-orange-500 whitespace-nowrap transition-colors duration-300">
         {supporter.name}
       </span>
     </div>
@@ -119,29 +121,42 @@ function LogoCard({ supporter }: { supporter: Supporter }) {
 
   if (supporter.websiteUrl) {
     return (
-      <a href={supporter.websiteUrl} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${supporter.name}`}>
-        {inner}
+      <a
+        href={supporter.websiteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Visit ${supporter.name}`}
+        className="flex-shrink-0"
+      >
+        {content}
       </a>
     );
   }
 
-  return inner;
+  return <div className="flex-shrink-0">{content}</div>;
 }
+
+// Duplicate the array so the marquee loops seamlessly
+const doubled = [...supporters, ...supporters];
 
 export default function SupportedBy() {
   return (
-    <section className="py-16 bg-gray-50 border-t border-gray-100">
-      <div className="max-w-6xl mx-auto px-5">
-        <div className="text-center mb-10">
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
-            Proudly Supported By
-          </p>
-          <div className="mx-auto w-12 h-0.5 bg-orange-400 rounded-full" />
-        </div>
+    <section className="py-14 bg-white border-t border-gray-100 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-5 mb-8 text-center">
+        <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">
+          Proudly Supported By
+        </p>
+        <div className="mx-auto w-12 h-0.5 bg-orange-400 rounded-full" />
+      </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 gap-4">
-          {supporters.map((s) => (
-            <LogoCard key={s.id} supporter={s} />
+      <div className="relative overflow-hidden">
+        {/* Fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-r from-white to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-l from-white to-transparent" />
+
+        <div className="marquee-track flex items-center">
+          {doubled.map((s, i) => (
+            <SupporterTile key={`${s.id}-${i}`} supporter={s} />
           ))}
         </div>
       </div>
