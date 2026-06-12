@@ -58,7 +58,7 @@ export default function Newsletter() {
             <div className="space-y-5 mb-10">
               {[
                 { icon: Mail, label: 'info@safestreetsireland.ie' },
-                { icon: Phone, label: '+353 ' },
+                { icon: Phone, label: '+353 1 29 74 3396 ' },
                 { icon: MapPin, label: 'Dublin — Ireland' },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-4">
