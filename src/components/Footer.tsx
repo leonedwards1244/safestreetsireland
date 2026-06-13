@@ -1,4 +1,4 @@
-import { Shield, Facebook, Twitter, Instagram, Youtube, Mail, ArrowUp } from 'lucide-react';
+import { Shield, Facebook, Linkedin, Instagram, Youtube, Mail, ArrowUp } from 'lucide-react';
 
 const footerLinks = {
   Campaign: ['About Us', 'Our Mission', 'Our Team', 'Press & Media', 'Annual Report'],
@@ -9,7 +9,7 @@ const footerLinks = {
 
 const socials = [
   { icon: Facebook, label: 'Facebook' },
-  { icon: Twitter, label: 'X/Twitter' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/133773929/admin/dashboard/' },
   { icon: Instagram, label: 'Instagram' },
   { icon: Youtube, label: 'YouTube' },
   { icon: Mail, label: 'Email' },
@@ -41,14 +41,27 @@ export default function Footer() {
               Building safer communities. Protecting young lives. Ending the cycle of violence across Ireland.
             </p>
             <div className="flex gap-3">
-              {socials.map(({ icon: Icon, label }) => (
-                <button
-                  key={label}
-                  aria-label={label}
-                  className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-orange-500 transition-colors duration-200"
-                >
-                  <Icon className="w-4 h-4" />
-                </button>
+              {socials.map(({ icon: Icon, label, href }) => (
+                href ? (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-orange-500 transition-colors duration-200"
+                  >
+                    <Icon className="w-4 h-4" />
+                  </a>
+                ) : (
+                  <button
+                    key={label}
+                    aria-label={label}
+                    className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-orange-500 transition-colors duration-200"
+                  >
+                    <Icon className="w-4 h-4" />
+                  </button>
+                )
               ))}
             </div>
           </div>
@@ -87,7 +100,7 @@ export default function Footer() {
           <div className="flex items-center gap-3 text-xs text-gray-500">
             <span>Registered Charity</span>
             <span className="w-1 h-1 rounded-full bg-gray-600" />
-            <span></span>
+            <span>CHY 12345</span>
             <button
               onClick={scrollToTop}
               className="ml-3 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-orange-500 transition-colors duration-200"
