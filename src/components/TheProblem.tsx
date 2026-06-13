@@ -74,6 +74,32 @@ function Counter({ target, suffix = '', prefix = '' }: { target: number; suffix?
   );
 }
 
+const bgImages = ['/SSI_STREETS_WORK.png', '/SSI_WORK_2.png'];
+
+function BackgroundSlideshow() {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setActive((i) => (i + 1) % bgImages.length), 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <>
+      {bgImages.map((src, i) => (
+        <div
+          key={src}
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-[2000ms]"
+          style={{
+            backgroundImage: `url('${src}')`,
+            opacity: i === active ? 0.08 : 0,
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
 export default function TheProblem() {
   const revealRef = useRef<HTMLDivElement>(null);
 
@@ -88,6 +114,9 @@ export default function TheProblem() {
 
   return (
     <section id="problem" className="py-24 bg-charcoal relative overflow-hidden splatter">
+      {/* Fading background photos */}
+      <BackgroundSlideshow />
+
       {/* Subtle orange gradient accent */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-400" />
       <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl" />
