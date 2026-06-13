@@ -128,7 +128,8 @@ function DonateForm({ onClose }: { onClose: () => void }) {
         }
       );
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to create checkout session');
+      if (!response.ok) throw new Error(data.error || 'Checkout session failed — please try again.');
+      if (!data.url) throw new Error('No checkout URL returned — please try again.');
       window.location.href = data.url;
     } catch (err: any) {
       setState({ loading:false, success:false, error: err.message || 'Something went wrong. Please try again.' });
