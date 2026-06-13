@@ -1,10 +1,35 @@
 import { Shield, Facebook, Linkedin, Instagram, Youtube, Mail, ArrowUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const footerLinks = {
-  Campaign: ['About Us', 'Our Mission', 'Our Team', 'Press & Media', 'Annual Report'],
-  'Get Involved': ['Volunteer', 'Donate', 'Partner With Us', 'Start a Chapter', 'Corporate Support'],
-  Resources: ['Youth Resources', 'Family Support', 'Educational Materials', 'Research & Data', 'News & Updates'],
-  Support: ['Contact Us', 'Crisis Support', 'Garda Information', 'Tusla Services', 'FAQ'],
+const footerLinks: Record<string, { label: string; href: string }[]> = {
+  Campaign: [
+    { label: 'About Us', href: '#' },
+    { label: 'Our Mission', href: '#' },
+    { label: 'Our Team', href: '#' },
+    { label: 'Press & Media', href: '#' },
+    { label: 'Annual Report', href: '#' },
+  ],
+  'Get Involved': [
+    { label: 'Volunteer', href: '#' },
+    { label: 'Donate', href: '#' },
+    { label: 'Partner With Us', href: '#' },
+    { label: 'Start a Chapter', href: '#' },
+    { label: 'Corporate Support', href: '#' },
+  ],
+  Resources: [
+    { label: 'Youth Resources', href: '/resources/youth' },
+    { label: 'Family Support', href: '/resources/family' },
+    { label: 'Educational Materials', href: '/resources/educational' },
+    { label: 'Research & Data', href: '/resources/research' },
+    { label: 'News & Updates', href: '/resources/news' },
+  ],
+  Support: [
+    { label: 'Contact Us', href: '#' },
+    { label: 'Crisis Support', href: '#' },
+    { label: 'Garda Information', href: '#' },
+    { label: 'Tusla Services', href: '#' },
+    { label: 'FAQ', href: '#' },
+  ],
 };
 
 const socials = [
@@ -71,14 +96,23 @@ export default function Footer() {
             <div key={category}>
               <h4 className="text-xs font-bold uppercase tracking-wider text-orange-400 mb-4">{category}</h4>
               <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
-                    >
-                      {link}
-                    </a>
+                {links.map(({ label, href }) => (
+                  <li key={label}>
+                    {href.startsWith('/') ? (
+                      <Link
+                        to={href}
+                        className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
+                      >
+                        {label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={href}
+                        className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
+                      >
+                        {label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

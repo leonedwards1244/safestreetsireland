@@ -11,6 +11,11 @@ import Newsletter from './components/Newsletter';
 import SupportedBy from './components/SupportedBy';
 import Footer from './components/Footer';
 import { SuccessPage } from './pages/SuccessPage';
+import YouthResourcesPage from './pages/resources/YouthResourcesPage';
+import FamilySupportPage from './pages/resources/FamilySupportPage';
+import EducationalMaterialsPage from './pages/resources/EducationalMaterialsPage';
+import ResearchDataPage from './pages/resources/ResearchDataPage';
+import NewsUpdatesPage from './pages/resources/NewsUpdatesPage';
 
 function LandingPage() {
   return (
@@ -46,6 +51,11 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/success" element={<SuccessPage />} />
+        <Route path="/resources/youth" element={<YouthResourcesPage />} />
+        <Route path="/resources/family" element={<FamilySupportPage />} />
+        <Route path="/resources/educational" element={<EducationalMaterialsPage />} />
+        <Route path="/resources/research" element={<ResearchDataPage />} />
+        <Route path="/resources/news" element={<NewsUpdatesPage />} />
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>
