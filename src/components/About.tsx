@@ -36,8 +36,8 @@ export default function About() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
-                src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900"
-                alt="Community members coming together"
+                src="/ChatGPT_Image_Jun_11,_2026,_07_56_00_PM.png"
+                alt="Safe Streets Ireland volunteers in action on Dublin streets"
                 className="w-full h-[520px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-orange-600/30 to-transparent" />
