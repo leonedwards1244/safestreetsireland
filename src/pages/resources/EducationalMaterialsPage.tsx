@@ -7,6 +7,8 @@ const materials = [
     description: 'A plain-language guide for parents, teachers, and community workers explaining how criminal networks target young people.',
     type: 'Guide',
     audience: 'Adults',
+    href: 'https://www.tusla.ie/children-first/what-is-child-abuse/types-of-abuse/',
+    source: 'tusla.ie',
   },
   {
     icon: Video,
@@ -14,6 +16,8 @@ const materials = [
     description: 'Short educational video highlighting the warning signs of gang involvement and how to intervene early.',
     type: 'Video',
     audience: 'All Ages',
+    href: 'https://www.youtube.com/@GardaSiochana',
+    source: 'youtube.com',
   },
   {
     icon: BookOpen,
@@ -21,6 +25,8 @@ const materials = [
     description: 'Practical resources for secondary school staff to identify, support, and report concerns about at-risk students.',
     type: 'Toolkit',
     audience: 'Schools',
+    href: 'https://www.gov.ie/en/publication/115e6-child-safeguarding-statement/',
+    source: 'gov.ie',
   },
   {
     icon: Users,
@@ -28,6 +34,8 @@ const materials = [
     description: 'Step-by-step programme teaching community members how to safely intervene or report when they witness violence.',
     type: 'Programme',
     audience: 'Community',
+    href: 'https://www.hse.ie/eng/services/list/4/mental-health-services/connect/resources/',
+    source: 'hse.ie',
   },
   {
     icon: FileText,
@@ -35,6 +43,8 @@ const materials = [
     description: 'Age-appropriate conversation starters and guidance for parents to discuss peer pressure, gangs, and personal safety.',
     type: 'Guide',
     audience: 'Parents',
+    href: 'https://www.barnardos.ie/learning-development/students-researchers/research-library/documents/barnardos-lets-talk-guide.pdf',
+    source: 'barnardos.ie',
   },
   {
     icon: Download,
@@ -42,6 +52,8 @@ const materials = [
     description: 'A printable pledge card for young people committing to non-violence and mutual respect in their communities.',
     type: 'Printable',
     audience: 'Youth',
+    href: 'https://spunout.ie/life/article/personal-safety-young-people',
+    source: 'spunout.ie',
   },
 ];
 
@@ -103,13 +115,19 @@ export default function EducationalMaterialsPage() {
                 <div className="flex-1">
                   <h3 className="font-bold text-gray-900 text-base mb-1">{m.title}</h3>
                   <p className="text-gray-500 text-sm leading-relaxed">{m.description}</p>
+                  <p className="text-xs text-gray-400 mt-2">{m.source}</p>
                 </div>
                 <div className="flex items-center justify-between mt-auto pt-2 border-t border-warm-200">
                   <span className={`text-xs font-medium ${audienceColors[m.audience]}`}>For: {m.audience}</span>
-                  <button className="flex items-center gap-1.5 text-orange-500 hover:text-orange-600 text-xs font-semibold transition-colors">
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-orange-500 hover:text-orange-600 text-xs font-semibold transition-colors"
+                  >
                     <ExternalLink className="w-3.5 h-3.5" />
                     View Resource
-                  </button>
+                  </a>
                 </div>
               </div>
             );
