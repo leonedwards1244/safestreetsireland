@@ -119,8 +119,8 @@ function DonateForm({ onClose }: { onClose: () => void }) {
             amount_cents: finalAmount * 100,
             guest_email: form.email.trim().toLowerCase(),
             guest_name: form.name.trim() || undefined,
-            success_url: `${window.location.origin}/success`,
-            cancel_url: `${window.location.origin}/#get-involved`,
+            success_url: `${window.location.origin}/thank-you`,
+            cancel_url: `${window.location.origin}/cancel`,
           }),
         }
       );

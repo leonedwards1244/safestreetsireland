@@ -10,7 +10,11 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  onOpenDonate: () => void;
+}
+
+export default function Navbar({ onOpenDonate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -73,12 +77,13 @@ export default function Navbar() {
           >
             Get Involved
           </a>
-          <a
-            href="#donate"
+          <button
+            type="button"
+            onClick={onOpenDonate}
             className="text-sm font-bold px-5 py-2.5 rounded-full bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300"
           >
             Donate
-          </a>
+          </button>
         </div>
 
         {/* Mobile toggle */}
@@ -112,9 +117,13 @@ export default function Navbar() {
             <a href="#get-involved" onClick={() => setMenuOpen(false)} className="flex-1 text-center btn-outline-orange text-sm py-3">
               Get Involved
             </a>
-            <a href="#donate" onClick={() => setMenuOpen(false)} className="flex-1 text-center btn-primary text-sm py-3">
+            <button
+              type="button"
+              onClick={() => { setMenuOpen(false); onOpenDonate(); }}
+              className="flex-1 text-center btn-primary text-sm py-3"
+            >
               Donate
-            </a>
+            </button>
           </div>
         </div>
       </div>

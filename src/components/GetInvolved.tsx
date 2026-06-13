@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Heart, HandHeart, Handshake, Users, ArrowRight } from 'lucide-react';
-import { Modal, type ModalType } from './ActionModals';
+import { type ModalType } from './ActionModals';
 
 const actions = [
   {
@@ -82,8 +82,13 @@ const actions = [
   },
 ];
 
-export default function GetInvolved() {
-  const [activeModal, setActiveModal] = useState<ModalType>(null);
+interface GetInvolvedProps {
+  activeModal: ModalType;
+  onOpenModal: (type: ModalType) => void;
+  onCloseModal: () => void;
+}
+
+export default function GetInvolved({ onOpenModal }: GetInvolvedProps) {
   const revealRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -148,7 +153,7 @@ export default function GetInvolved() {
                 </ul>
 
                 <button
-                  onClick={() => setActiveModal(id)}
+                  onClick={() => onOpenModal(id)}
                   className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
                 >
                   {cta}
@@ -170,10 +175,6 @@ export default function GetInvolved() {
           </div>
         </div>
       </section>
-
-      {activeModal && (
-        <Modal type={activeModal} onClose={() => setActiveModal(null)} />
-      )}
     </>
   );
 }
