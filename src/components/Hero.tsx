@@ -1,6 +1,68 @@
 import { ArrowDown, Heart, Users, HandHeart } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+
+function useCountUp(target: number, duration = 1800, start = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+      else setCount(target);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return count;
+}
+
+interface Stat {
+  icon: React.ElementType;
+  raw: number;
+  suffix: string;
+  label: string;
+}
+
+const stats: Stat[] = [
+  { icon: Users,     raw: 100, suffix: '+', label: 'Communities Reached' },
+  { icon: Heart,     raw: 200, suffix: '+', label: 'Families Supported Goal' },
+  { icon: HandHeart, raw: 100, suffix: '+', label: 'Active Volunteers' },
+  { icon: Users,     raw: 32,  suffix: '',  label: 'Partner Organisations' },
+];
+
+function StatCard({ stat, animate }: { stat: Stat; animate: boolean }) {
+  const count = useCountUp(stat.raw, 1800, animate);
+  return (
+    <div className="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-all duration-300">
+      <stat.icon className="w-7 h-7 text-orange-200 mx-auto mb-2" />
+      <div className="text-2xl font-extrabold text-white tabular-nums">
+        {animate ? `${count.toLocaleString()}${stat.suffix}` : `0${stat.suffix}`}
+      </div>
+      <div className="text-white/75 text-xs font-medium leading-tight mt-1">{stat.label}</div>
+    </div>
+  );
+}
 
 export default function Hero() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) { setAnimate(true); observer.disconnect(); }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
       {/* Background image */}
@@ -74,21 +136,9 @@ export default function Hero() {
         </div>
 
         {/* Right impact cards */}
-        <div className="flex-shrink-0 grid grid-cols-2 gap-4 max-w-sm w-full">
-          {[
-            { icon: Users, value: '100+', label: 'Communities Reached' },
-            { icon: Heart, value: '200+', label: 'Families Supported Goal' },
-            { icon: HandHeart, value: '100+', label: 'Active Volunteers' },
-            { icon: Users, value: '32', label: 'Partner Organisations' },
-          ].map(({ icon: Icon, value, label }) => (
-            <div
-              key={label}
-              className="bg-white/15 backdrop-blur-sm border border-white/20 rounded-2xl p-5 text-center hover:bg-white/20 transition-all duration-300"
-            >
-              <Icon className="w-7 h-7 text-orange-200 mx-auto mb-2" />
-              <div className="text-2xl font-extrabold text-white">{value}</div>
-              <div className="text-white/75 text-xs font-medium leading-tight mt-1">{label}</div>
-            </div>
+        <div ref={gridRef} className="flex-shrink-0 grid grid-cols-2 gap-4 max-w-sm w-full">
+          {stats.map((stat) => (
+            <StatCard key={stat.label} stat={stat} animate={animate} />
           ))}
         </div>
       </div>
