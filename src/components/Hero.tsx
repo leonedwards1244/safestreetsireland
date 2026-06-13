@@ -78,7 +78,7 @@ export default function Hero() {
           {[
             { icon: Users, value: '100+', label: 'Communities Reached' },
             { icon: Heart, value: '2,400+', label: 'Families Supported' },
-            { icon: HandHeart, value: '850+', label: 'Active Volunteers' },
+            { icon: HandHeart, value: '100+', label: 'Active Volunteers' },
             { icon: Users, value: '32', label: 'Partner Organisations' },
           ].map(({ icon: Icon, value, label }) => (
             <div
