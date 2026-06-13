@@ -11,36 +11,32 @@ const stripe = new Stripe(stripeSecret, {
   },
 });
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, Apikey',
+};
+
 function corsResponse(body: string | object | null, status = 200) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': '*',
-  };
-
   if (status === 204) {
-    return new Response(null, { status, headers });
+    return new Response(null, { status, headers: corsHeaders });
   }
-
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
-      ...headers,
-      'Content-Type': 'application/json',
-    },
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
 }
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return corsResponse(null, 204);
+  }
+
+  if (req.method !== 'POST') {
+    return corsResponse({ error: 'Method not allowed' }, 405);
+  }
+
   try {
-    if (req.method === 'OPTIONS') {
-      return corsResponse({}, 204);
-    }
-
-    if (req.method !== 'POST') {
-      return corsResponse({ error: 'Method not allowed' }, 405);
-    }
-
     const { price_id, success_url, cancel_url, mode, amount_cents, guest_email, guest_name } = await req.json();
 
     if (!success_url || typeof success_url !== 'string') {
@@ -53,10 +49,9 @@ Deno.serve(async (req) => {
       return corsResponse({ error: 'Expected parameter mode to be one of payment, subscription' }, 400);
     }
 
-    // Try to authenticate — auth is optional for one-time donations
+    // Auth is optional — donations work as guest
     const authHeader = req.headers.get('Authorization');
     let user = null;
-
     if (authHeader) {
       const token = authHeader.replace('Bearer ', '');
       const { data: { user: authUser } } = await supabase.auth.getUser(token);
@@ -64,7 +59,7 @@ Deno.serve(async (req) => {
     }
 
     // Build line items — support custom amount for donations
-    let lineItems;
+    let lineItems: Stripe.Checkout.SessionCreateParams.LineItem[];
     if (amount_cents && typeof amount_cents === 'number' && amount_cents >= 100) {
       lineItems = [
         {
@@ -87,7 +82,6 @@ Deno.serve(async (req) => {
 
     // For authenticated users, look up or create Stripe customer
     let customerId: string | undefined;
-
     if (user) {
       const { data: customer } = await supabase
         .from('stripe_customers')
@@ -103,26 +97,18 @@ Deno.serve(async (req) => {
           email: user.email,
           metadata: { userId: user.id },
         });
-
         await supabase.from('stripe_customers').insert({
           user_id: user.id,
           customer_id: newCustomer.id,
         });
-
-        if (mode === 'subscription') {
-          await supabase.from('stripe_subscriptions').insert({
-            customer_id: newCustomer.id,
-            status: 'not_started',
-          });
-        }
-
         customerId = newCustomer.id;
       }
     }
 
-    // Build session params
+    // Use automatic_payment_methods so Stripe enables all eligible methods
+    // including Apple Pay, Google Pay, and card — based on device & browser
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ['card'],
+      automatic_payment_methods: { enabled: true },
       line_items: lineItems,
       mode,
       success_url,
@@ -131,8 +117,14 @@ Deno.serve(async (req) => {
 
     if (customerId) {
       sessionParams.customer = customerId;
-    } else if (guest_email && typeof guest_email === 'string') {
-      sessionParams.customer_email = guest_email;
+    } else {
+      // Prefill email if provided; pass name via metadata for receipt
+      if (guest_email && typeof guest_email === 'string') {
+        sessionParams.customer_email = guest_email;
+      }
+      if (guest_name && typeof guest_name === 'string') {
+        sessionParams.metadata = { donor_name: guest_name };
+      }
     }
 
     const session = await stripe.checkout.sessions.create(sessionParams);
