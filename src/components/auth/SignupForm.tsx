@@ -5,6 +5,22 @@ import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Alert } from '../ui/Alert';
 
+async function isPasswordPwned(password: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+  const prefix = hashHex.slice(0, 5);
+  const suffix = hashHex.slice(5);
+
+  const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+  if (!res.ok) return false; // fail open if the API is unreachable
+
+  const text = await res.text();
+  return text.split('\n').some((line) => line.split(':')[0] === suffix);
+}
+
 export function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +44,13 @@ export function SignupForm() {
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
+      setLoading(false);
+      return;
+    }
+
+    const pwned = await isPasswordPwned(password);
+    if (pwned) {
+      setError('This password has appeared in a known data breach. Please choose a different password.');
       setLoading(false);
       return;
     }
