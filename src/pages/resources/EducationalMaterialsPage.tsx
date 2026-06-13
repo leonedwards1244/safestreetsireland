@@ -1,4 +1,4 @@
-import { ArrowLeft, Shield, BookOpen, Download, ExternalLink, FileText, Video, Users } from 'lucide-react';
+import { ArrowLeft, Shield, BookOpen, Download, ExternalLink, FileText, Video, Users, Rocket } from 'lucide-react';
 
 const materials = [
   {
@@ -55,6 +55,15 @@ const materials = [
     href: 'https://spunout.ie/life/article/personal-safety-young-people',
     source: 'spunout.ie',
   },
+  {
+    icon: Rocket,
+    title: 'Superteam Ireland',
+    description: 'A non-profit accelerator funded by Solana offering grants, workshops, and a safe space at Dogpatch Labs. Talent Hubs run every Friday — open to students and builders looking to grow their start-up and get educated in Web3.',
+    type: 'Accelerator',
+    audience: 'Students & Builders',
+    href: 'https://superteam.fun/ireland',
+    source: 'superteam.fun/ireland',
+  },
 ];
 
 const typeColors: Record<string, string> = {
@@ -63,6 +72,7 @@ const typeColors: Record<string, string> = {
   Toolkit: 'bg-green-100 text-green-700',
   Programme: 'bg-yellow-100 text-yellow-700',
   Printable: 'bg-pink-100 text-pink-700',
+  Accelerator: 'bg-teal-100 text-teal-700',
 };
 
 const audienceColors: Record<string, string> = {
@@ -72,6 +82,7 @@ const audienceColors: Record<string, string> = {
   Community: 'text-gray-500',
   Parents: 'text-gray-500',
   Youth: 'text-gray-500',
+  'Students & Builders': 'text-gray-500',
 };
 
 export default function EducationalMaterialsPage() {
