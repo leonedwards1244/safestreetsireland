@@ -77,7 +77,7 @@ export default function Hero() {
         <div className="flex-shrink-0 grid grid-cols-2 gap-4 max-w-sm w-full">
           {[
             { icon: Users, value: '100+', label: 'Communities Reached' },
-            { icon: Heart, value: '2,400+', label: 'Families Supported' },
+            { icon: Heart, value: '200+', label: 'Families Supported Goal' },
             { icon: HandHeart, value: '100+', label: 'Active Volunteers' },
             { icon: Users, value: '32', label: 'Partner Organisations' },
           ].map(({ icon: Icon, value, label }) => (
