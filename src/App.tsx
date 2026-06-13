@@ -14,19 +14,29 @@ import { SuccessPage } from './pages/SuccessPage';
 
 function LandingPage() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <About />
-      <MissionVisionValues />
-      <TheProblem />
-      <ImpactBanner />
-      <GetInvolved />
-      <Stories />
-      <Newsletter />
-      <SupportedBy />
-      <Footer />
-    </div>
+    <>
+      {/* Fixed background image */}
+      <div
+        className="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/bg.png')" }}
+      />
+      {/* Semi-transparent dark overlay */}
+      <div className="fixed inset-0 -z-10 bg-black/50" />
+
+      <div className="relative z-10 min-h-screen">
+        <Navbar />
+        <Hero />
+        <About />
+        <MissionVisionValues />
+        <TheProblem />
+        <ImpactBanner />
+        <GetInvolved />
+        <Stories />
+        <Newsletter />
+        <SupportedBy />
+        <Footer />
+      </div>
+    </>
   );
 }
 
