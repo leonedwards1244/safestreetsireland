@@ -61,8 +61,8 @@ const materials = [
     description: 'A non-profit accelerator funded by Solana offering grants, workshops, and a safe space at Dogpatch Labs. Talent Hubs run every Friday — open to students and builders looking to grow their start-up and get educated in Web3.',
     type: 'Accelerator',
     audience: 'Students & Builders',
-    href: 'https://superteam.fun/ireland',
-    source: 'superteam.fun/ireland',
+    href: 'https://ie.superteam.fun/',
+    source: 'ie.superteam.fun',
   },
 ];
 
