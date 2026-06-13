@@ -8,7 +8,7 @@ const footerLinks = {
 };
 
 const socials = [
-  { icon: Facebook, label: 'Facebook' },
+  { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61590416144888' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/133773929/admin/dashboard/' },
   { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/safestreetsireland/' },
   { icon: Youtube, label: 'YouTube' },
