@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../lib/auth';
 import { SubscriptionStatus } from '../components/stripe/SubscriptionStatus';
 import { ProductCard } from '../components/stripe/ProductCard';
-import { STRIPE_PRODUCTS } from '../stripe-config';
+import { stripeProducts } from '../stripe-config';
 import { Button } from '../components/ui/Button';
 import { LogOut, User } from 'lucide-react';
 
@@ -45,7 +45,7 @@ export function DashboardPage() {
                 Available Products
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {STRIPE_PRODUCTS.map((product) => (
+                {stripeProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
