@@ -18,7 +18,7 @@ async function isPasswordPwned(password: string): Promise<boolean> {
   if (!res.ok) return false; // fail open if the API is unreachable
 
   const text = await res.text();
-  return text.split('\n').some((line) => line.split(':')[0] === suffix);
+  return text.split('\n').some((line) => line.split(':')[0].trim() === suffix);
 }
 
 export function SignupForm() {
@@ -42,8 +42,8 @@ export function SignupForm() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
       setLoading(false);
       return;
     }
@@ -111,7 +111,7 @@ export function SignupForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="new-password"
-            helperText="Must be at least 6 characters"
+            helperText="Must be at least 8 characters"
           />
 
           <Input
