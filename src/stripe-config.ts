@@ -4,9 +4,11 @@ export interface StripeProduct {
   name: string;
   description: string;
   mode: 'payment' | 'subscription';
+  price_per_unit?: number;
+  currency_symbol?: string;
 }
 
-export const STRIPE_PRODUCTS: StripeProduct[] = [
+export const stripeProducts: StripeProduct[] = [
   {
     id: 'prod_UfXSLVj1ulnNsS',
     priceId: 'price_1TgCO1B0XGg8U41hnIy8Antc',
@@ -17,5 +19,9 @@ export const STRIPE_PRODUCTS: StripeProduct[] = [
 ];
 
 export const getProductByPriceId = (priceId: string): StripeProduct | undefined => {
-  return STRIPE_PRODUCTS.find(product => product.priceId === priceId);
+  return stripeProducts.find(product => product.priceId === priceId);
+};
+
+export const getProductById = (id: string): StripeProduct | undefined => {
+  return stripeProducts.find(product => product.id === id);
 };
