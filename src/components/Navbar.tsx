@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Facebook, Instagram, Linkedin, Youtube, Mail, CalendarDays } from 'lucide-react';
+
+const topSocials = [
+  { icon: Facebook,  label: 'Facebook',  href: 'https://www.facebook.com/profile.php?id=61590416144888' },
+  { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/safestreetsireland/' },
+  { icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/133773929/' },
+  { icon: Youtube,   label: 'YouTube',   href: null },
+  { icon: Mail,      label: 'Email',     href: 'mailto:info@safestreetsireland.ie' },
+];
 
 const navLinks = [
-  { label: 'About', href: '#about' },
+  { label: 'About',       href: '#about' },
   { label: 'Our Mission', href: '#mission' },
   { label: 'The Problem', href: '#problem' },
-  { label: 'Get Involved', href: '#get-involved' },
-  { label: 'Stories', href: '#stories' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Events',      href: '#events' },
+  { label: 'Get Involved',href: '#get-involved' },
+  { label: 'Stories',     href: '#stories' },
+  { label: 'Contact',     href: '#contact' },
 ];
 
 interface NavbarProps {
@@ -25,80 +34,147 @@ export default function Navbar({ onOpenDonate }: NavbarProps) {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white shadow-md py-3'
-          : 'bg-transparent py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <img
-            src="/SSI_LOGO_TRANSPARENT.png"
-            alt="Safe Streets Ireland"
-            className="h-10 w-auto transition-all duration-300 group-hover:opacity-80"
-          />
-          <div>
-            <span className={`font-black text-base leading-none block transition-colors duration-300 italic ${scrolled ? 'text-charcoal' : 'text-white'}`}>
-              Safe Streets
-            </span>
-            <span className={`font-bold text-xs leading-none block transition-colors duration-300 italic ${scrolled ? 'text-orange-500' : 'text-orange-300'}`}>
-              Ireland
-            </span>
-          </div>
-        </a>
+    <header className="fixed top-0 left-0 right-0 z-50">
 
-        {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`nav-link text-sm font-semibold transition-colors duration-200 ${
-                scrolled ? 'text-gray-700 hover:text-orange-500' : 'text-white/90 hover:text-white'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+      {/* ── Top utility bar ───────────────────────────────────────────── */}
+      <div className="bg-charcoal border-b border-orange-500/40">
+        <div className="max-w-7xl mx-auto px-5 h-10 flex items-center justify-between gap-4">
 
-        {/* CTA */}
-        <div className="hidden lg:flex items-center gap-3">
-          <a
-            href="#get-involved"
-            className={`text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-300 ${
-              scrolled
-                ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md'
-                : 'bg-white/15 backdrop-blur-sm text-white border border-white/30 hover:bg-white hover:text-orange-600'
-            }`}
-          >
-            Get Involved
+          {/* Logo + name */}
+          <a href="#" className="flex items-center gap-2 group flex-shrink-0">
+            <img
+              src="/SSI_LOGO_TRANSPARENT.png"
+              alt="Safe Streets Ireland"
+              className="h-6 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+            />
+            <span className="text-white text-xs font-bold tracking-wide group-hover:text-orange-300 transition-colors hidden sm:block">
+              Safe Streets Ireland
+            </span>
           </a>
-          <button
-            type="button"
-            onClick={onOpenDonate}
-            className="text-sm font-bold px-5 py-2.5 rounded-full bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300"
-          >
-            Donate
-          </button>
-        </div>
 
-        {/* Mobile toggle */}
-        <button
-          className={`lg:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-charcoal' : 'text-white'}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          {/* Right side: Events tab + socials */}
+          <div className="flex items-center gap-1">
+            {/* Events pill */}
+            <a
+              href="#events"
+              className="flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full mr-2 transition-colors duration-200"
+            >
+              <CalendarDays className="w-3 h-3" />
+              Events
+            </a>
+
+            {/* Divider */}
+            <div className="w-px h-4 bg-white/20 mx-1" />
+
+            {/* Social icons */}
+            {topSocials.map(({ icon: Icon, label, href }) =>
+              href ? (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  aria-label={label}
+                  className="w-7 h-7 flex items-center justify-center rounded-full text-white/60 hover:text-white hover:bg-orange-500 transition-all duration-200"
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </a>
+              ) : (
+                <button
+                  key={label}
+                  aria-label={label}
+                  className="w-7 h-7 flex items-center justify-center rounded-full text-white/30 cursor-default"
+                  disabled
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </button>
+              )
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* ── Main navigation bar ───────────────────────────────────────── */}
       <div
-        className={`lg:hidden overflow-hidden transition-all duration-300 ${
+        className={`transition-all duration-300 ${
+          scrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-4'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
+
+          {/* Logo */}
+          <a href="#" className="flex items-center gap-3 group">
+            <img
+              src="/SSI_LOGO_TRANSPARENT.png"
+              alt="Safe Streets Ireland"
+              className="h-9 w-auto transition-all duration-300 group-hover:opacity-80"
+            />
+            <div>
+              <span className={`font-black text-base leading-none block transition-colors duration-300 italic ${scrolled ? 'text-charcoal' : 'text-white'}`}>
+                Safe Streets
+              </span>
+              <span className={`font-bold text-xs leading-none block transition-colors duration-300 italic ${scrolled ? 'text-orange-500' : 'text-orange-300'}`}>
+                Ireland
+              </span>
+            </div>
+          </a>
+
+          {/* Desktop nav */}
+          <nav className="hidden xl:flex items-center gap-6">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`nav-link text-sm font-semibold transition-colors duration-200 ${
+                  link.label === 'Events'
+                    ? scrolled
+                      ? 'text-orange-500 hover:text-orange-600'
+                      : 'text-orange-300 hover:text-orange-200'
+                    : scrolled
+                    ? 'text-gray-700 hover:text-orange-500'
+                    : 'text-white/90 hover:text-white'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* CTA buttons */}
+          <div className="hidden xl:flex items-center gap-3">
+            <a
+              href="#get-involved"
+              className={`text-sm font-bold px-5 py-2.5 rounded-full transition-all duration-300 ${
+                scrolled
+                  ? 'bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md'
+                  : 'bg-white/15 backdrop-blur-sm text-white border border-white/30 hover:bg-white hover:text-orange-600'
+              }`}
+            >
+              Get Involved
+            </a>
+            <button
+              type="button"
+              onClick={onOpenDonate}
+              className="text-sm font-bold px-5 py-2.5 rounded-full bg-orange-500 text-white hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              Donate
+            </button>
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            className={`xl:hidden p-2 rounded-lg transition-colors ${scrolled ? 'text-charcoal' : 'text-white'}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Mobile menu ───────────────────────────────────────────────── */}
+      <div
+        className={`xl:hidden overflow-hidden transition-all duration-300 ${
           menuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -108,13 +184,42 @@ export default function Navbar({ onOpenDonate }: NavbarProps) {
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="text-gray-700 font-semibold py-3 px-2 rounded-lg hover:bg-orange-50 hover:text-orange-600 transition-colors"
+              className={`font-semibold py-3 px-2 rounded-lg transition-colors ${
+                link.label === 'Events'
+                  ? 'text-orange-500 hover:bg-orange-50 hover:text-orange-600 flex items-center gap-2'
+                  : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
+              }`}
             >
+              {link.label === 'Events' && <CalendarDays className="w-4 h-4" />}
               {link.label}
             </a>
           ))}
-          <div className="flex gap-3 pt-3 border-t border-gray-100 mt-2">
-            <a href="#get-involved" onClick={() => setMenuOpen(false)} className="flex-1 text-center btn-outline-orange text-sm py-3">
+
+          {/* Mobile social row */}
+          <div className="flex items-center gap-2 py-3 px-2 border-t border-gray-100 mt-1">
+            <span className="text-xs text-gray-400 font-medium mr-1">Follow us:</span>
+            {topSocials.map(({ icon: Icon, label, href }) =>
+              href ? (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  aria-label={label}
+                  className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-orange-500 hover:text-white transition-all duration-200"
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ) : null
+            )}
+          </div>
+
+          <div className="flex gap-3 pt-2 border-t border-gray-100">
+            <a
+              href="#get-involved"
+              onClick={() => setMenuOpen(false)}
+              className="flex-1 text-center btn-outline-orange text-sm py-3"
+            >
               Get Involved
             </a>
             <button

@@ -89,7 +89,7 @@ export default function Hero({ onOpenDonate }: HeroProps) {
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-orange-300/20 rounded-full blur-3xl" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-5 pt-28 pb-20 flex flex-col lg:flex-row items-center gap-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 pt-36 pb-20 flex flex-col lg:flex-row items-center gap-16">
         {/* Left text block */}
         <div className="flex-1 text-center lg:text-left">
           {/* Campaign badge */}
