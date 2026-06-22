@@ -6,7 +6,6 @@ import About from './components/About';
 import TheProblem from './components/TheProblem';
 import MissionVisionValues from './components/MissionVisionValues';
 import ImpactBanner from './components/ImpactBanner';
-import Events from './components/Events';
 import Stories from './components/Stories';
 import GetInvolved from './components/GetInvolved';
 import SupportedBy from './components/SupportedBy';
@@ -35,7 +34,6 @@ function HomePage() {
       <TheProblem />
       <MissionVisionValues />
       <ImpactBanner />
-      <Events />
       <Stories />
       <GetInvolved
         activeModal={activeModal}
