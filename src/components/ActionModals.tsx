@@ -84,100 +84,64 @@ function VolunteerForm({ onClose }: { onClose: () => void }) {
 }
 
 // ── Donate Form ────────────────────────────────────────────────────────────────
-const AMOUNTS = [10, 25, 50, 100, 250];
-
-function DonateForm({ onClose }: { onClose: () => void }) {
-  const [amount, setAmount] = useState<number>(25);
-  const [custom, setCustom] = useState('');
-  const [form, setForm] = useState({ name:'', email:'' });
-  const [state, setState] = useState<FormState>({ loading:false, success:false, error:null });
-
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }));
-
-  const finalAmount = custom ? parseInt(custom, 10) : amount;
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!finalAmount || finalAmount < 1) {
-      setState(s => ({ ...s, error: 'Please enter a valid donation amount.' }));
-      return;
-    }
-    if (!form.email.trim()) {
-      setState(s => ({ ...s, error: 'Please enter your email address.' }));
-      return;
-    }
-    setState({ loading:true, success:false, error:null });
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            mode: 'payment',
-            amount_cents: finalAmount * 100,
-            guest_email: form.email.trim().toLowerCase(),
-            guest_name: form.name.trim() || undefined,
-            success_url: `${window.location.origin}/thank-you`,
-            cancel_url: `${window.location.origin}/cancel`,
-          }),
-        }
-      );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Checkout session failed — please try again.');
-      if (!data.url) throw new Error('No checkout URL returned — please try again.');
-      window.location.href = data.url;
-    } catch (err: any) {
-      setState({ loading:false, success:false, error: err.message || 'Something went wrong. Please try again.' });
-    }
-  };
-
+function DonateForm({ onClose: _onClose }: { onClose: () => void }) {
   return (
-    <form onSubmit={submit} className="space-y-5">
-      {/* Amount selector */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-3">Select Amount (€)</label>
-        <div className="flex flex-wrap gap-2 mb-3">
-          {AMOUNTS.map(a => (
-            <button
-              key={a}
-              type="button"
-              onClick={() => { setAmount(a); setCustom(''); }}
-              className={`px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all ${
-                amount === a && !custom
-                  ? 'bg-orange-500 border-orange-500 text-white'
-                  : 'border-gray-200 text-gray-700 hover:border-orange-400'
-              }`}
-            >
-              €{a}
-            </button>
-          ))}
-        </div>
-        <input
-          type="number"
-          min="1"
-          placeholder="Enter custom amount..."
-          value={custom}
-          onChange={e => { setCustom(e.target.value); setAmount(0); }}
-          className="form-input"
-        />
+    <div className="space-y-6 text-center">
+      <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+        Your donation directly funds prevention programmes, youth mentorship, and family support services across Ireland. Every contribution saves lives.
+      </p>
+
+      {/* Impact bullets */}
+      <div className="bg-orange-50 rounded-2xl p-5 text-left space-y-2.5">
+        {[
+          '€10 funds youth workshop materials',
+          '€25 supports a family counselling session',
+          '€50 runs a community safety event',
+          '€100 funds a month of youth outreach',
+        ].map((item) => (
+          <div key={item} className="flex items-start gap-2.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0 mt-1.5" />
+            <span className="text-gray-700 text-sm">{item}</span>
+          </div>
+        ))}
       </div>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label="Your Name (optional)">
-          <input className="form-input" placeholder="Your name" value={form.name} onChange={set('name')} />
-        </Field>
-        <Field label="Email Address" required>
-          <input type="email" className="form-input" placeholder="you@email.com" value={form.email} onChange={set('email')} required />
-        </Field>
+
+      {/* Fundraisely donate button */}
+      <div className="flex justify-center pt-2">
+        <button
+          type="button"
+          data-fundraisely-donate=""
+          data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
+          data-title="Donate"
+          style={{
+            background: '#157f85',
+            color: '#ffffff',
+            border: 'none',
+            borderRadius: '10px',
+            padding: '14px 32px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            fontSize: '16px',
+            letterSpacing: '0.01em',
+          }}
+        >
+          Donate Now
+        </button>
       </div>
-      {state.error && <ErrorAlert message={state.error} />}
-      <SubmitButton loading={state.loading} label={`Donate €${finalAmount || '—'} Now`} />
-      <p className="text-center text-xs text-gray-400">You'll be redirected to Stripe's secure checkout. Your data is protected.</p>
-    </form>
+
+      <p className="text-xs text-gray-400">
+        Secure donations powered by{' '}
+        <a
+          href="https://fundraisely.ie"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-gray-600 transition-colors"
+        >
+          Fundraisely
+        </a>
+        . Your data is protected.
+      </p>
+    </div>
   );
 }
 
