@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -13,6 +13,7 @@ import SupportedBy from './components/SupportedBy';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import { Modal, type ModalType } from './components/ActionModals';
+import DonateModal, { type DonateModalHandle } from './components/DonateModal';
 import { SuccessPage } from './pages/SuccessPage';
 import { CancelPage } from './pages/CancelPage';
 import { LoginPage } from './pages/LoginPage';
@@ -26,10 +27,9 @@ import YouthResourcesPage from './pages/resources/YouthResourcesPage';
 
 function HomePage() {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const donateModalRef = useRef<DonateModalHandle>(null);
 
-  const handleDonate = () => {
-    window.open('https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314', '_blank', 'noopener,noreferrer');
-  };
+  const handleDonate = () => donateModalRef.current?.open();
 
   const handleOpenModal = (type: ModalType) => {
     if (type === 'donate') {
@@ -58,10 +58,11 @@ function HomePage() {
       <Newsletter />
       <Footer />
 
-      {/* Non-donate modals (volunteer / partner / chapter) */}
       {activeModal && activeModal !== 'donate' && (
         <Modal type={activeModal} onClose={() => setActiveModal(null)} />
       )}
+
+      <DonateModal ref={donateModalRef} />
     </>
   );
 }
@@ -85,3 +86,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
