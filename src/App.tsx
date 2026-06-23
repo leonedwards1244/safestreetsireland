@@ -13,11 +13,6 @@ import SupportedBy from './components/SupportedBy';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import { Modal, type ModalType } from './components/ActionModals';
-import { SuccessPage } from './pages/SuccessPage';
-import { CancelPage } from './pages/CancelPage';
-import { LoginPage } from './pages/LoginPage';
-import { SignupPage } from './pages/SignupPage';
-import { DashboardPage } from './pages/DashboardPage';
 import EducationalMaterialsPage from './pages/resources/EducationalMaterialsPage';
 import FamilySupportPage from './pages/resources/FamilySupportPage';
 import NewsUpdatesPage from './pages/resources/NewsUpdatesPage';
@@ -56,11 +51,6 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/thank-you" element={<SuccessPage />} />
-        <Route path="/cancel" element={<CancelPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/resources/educational-materials" element={<EducationalMaterialsPage />} />
         <Route path="/resources/family-support" element={<FamilySupportPage />} />
         <Route path="/resources/news-updates" element={<NewsUpdatesPage />} />

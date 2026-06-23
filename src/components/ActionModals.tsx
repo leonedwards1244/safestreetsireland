@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-type ModalType = 'volunteer' | 'donate' | 'partner' | 'chapter' | null;
+type ModalType = 'volunteer' | 'partner' | 'chapter' | null;
 
 interface FormState {
   loading: boolean;
@@ -83,105 +83,7 @@ function VolunteerForm({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Donate Form ────────────────────────────────────────────────────────────────
-const AMOUNTS = [10, 25, 50, 100, 250];
-
-function DonateForm({ onClose }: { onClose: () => void }) {
-  const [amount, setAmount] = useState<number>(25);
-  const [custom, setCustom] = useState('');
-  const [form, setForm] = useState({ name:'', email:'' });
-  const [state, setState] = useState<FormState>({ loading:false, success:false, error:null });
-
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }));
-
-  const finalAmount = custom ? parseInt(custom, 10) : amount;
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!finalAmount || finalAmount < 1) {
-      setState(s => ({ ...s, error: 'Please enter a valid donation amount.' }));
-      return;
-    }
-    if (!form.email.trim()) {
-      setState(s => ({ ...s, error: 'Please enter your email address.' }));
-      return;
-    }
-    setState({ loading:true, success:false, error:null });
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/stripe-checkout`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
-          body: JSON.stringify({
-            mode: 'payment',
-            amount_cents: finalAmount * 100,
-            guest_email: form.email.trim().toLowerCase(),
-            guest_name: form.name.trim() || undefined,
-            success_url: `${window.location.origin}/thank-you`,
-            cancel_url: `${window.location.origin}/cancel`,
-          }),
-        }
-      );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Checkout session failed — please try again.');
-      if (!data.url) throw new Error('No checkout URL returned — please try again.');
-      window.location.href = data.url;
-    } catch (err: any) {
-      setState({ loading:false, success:false, error: err.message || 'Something went wrong. Please try again.' });
-    }
-  };
-
-  return (
-    <form onSubmit={submit} className="space-y-5">
-      {/* Amount selector */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-3">Select Amount (€)</label>
-        <div className="flex flex-wrap gap-2 mb-3">
-          {AMOUNTS.map(a => (
-            <button
-              key={a}
-              type="button"
-              onClick={() => { setAmount(a); setCustom(''); }}
-              className={`px-5 py-2.5 rounded-full text-sm font-bold border-2 transition-all ${
-                amount === a && !custom
-                  ? 'bg-orange-500 border-orange-500 text-white'
-                  : 'border-gray-200 text-gray-700 hover:border-orange-400'
-              }`}
-            >
-              €{a}
-            </button>
-          ))}
-        </div>
-        <input
-          type="number"
-          min="1"
-          placeholder="Enter custom amount..."
-          value={custom}
-          onChange={e => { setCustom(e.target.value); setAmount(0); }}
-          className="form-input"
-        />
-      </div>
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label="Your Name (optional)">
-          <input className="form-input" placeholder="Your name" value={form.name} onChange={set('name')} />
-        </Field>
-        <Field label="Email Address" required>
-          <input type="email" className="form-input" placeholder="you@email.com" value={form.email} onChange={set('email')} required />
-        </Field>
-      </div>
-      {state.error && <ErrorAlert message={state.error} />}
-      <SubmitButton loading={state.loading} label={`Donate €${finalAmount || '—'} Now`} />
-      <p className="text-center text-xs text-gray-400">You'll be redirected to Stripe's secure checkout. Your data is protected.</p>
-    </form>
-  );
-}
-
-// ── Partner Form ───────────────────────────────────────────────────────────────
+// ── Shared UI helpers ──────────────────────────────────────────────────────────
 function PartnerForm({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({ org_name:'', contact_name:'', email:'', phone:'', org_type:'other', message:'' });
   const [state, setState] = useState<FormState>({ loading:false, success:false, error:null });
@@ -348,7 +250,6 @@ function SuccessScreen({ title, message, onClose }: { title: string; message: st
 // ── Modal wrapper ──────────────────────────────────────────────────────────────
 const MODAL_TITLES: Record<NonNullable<ModalType>, string> = {
   volunteer: 'Become a Volunteer',
-  donate:    'Make a Donation',
   partner:   'Partner With Us',
   chapter:   'Start a Chapter',
 };
@@ -371,7 +272,6 @@ function Modal({ type, onClose }: { type: NonNullable<ModalType>; onClose: () =>
           </button>
         </div>
         {type === 'volunteer' && <VolunteerForm onClose={onClose} />}
-        {type === 'donate'    && <DonateForm    onClose={onClose} />}
         {type === 'partner'   && <PartnerForm   onClose={onClose} />}
         {type === 'chapter'   && <ChapterForm   onClose={onClose} />}
       </div>

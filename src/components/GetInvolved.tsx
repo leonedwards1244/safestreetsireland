@@ -2,9 +2,24 @@ import { useEffect, useRef } from 'react';
 import { Heart, HandHeart, Handshake, Users, ArrowRight } from 'lucide-react';
 import { type ModalType } from './ActionModals';
 
-const actions = [
+type ActionId = ModalType | 'donate';
+
+const actions: Array<{
+  id: ActionId;
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  description: string;
+  points: string[];
+  cta: string;
+  color: string;
+  light: string;
+  accent: string;
+  border: string;
+  featured?: boolean;
+}> = [
   {
-    id: 'volunteer' as ModalType,
+    id: 'volunteer' as ActionId,
     icon: HandHeart,
     title: 'Volunteer',
     subtitle: 'Give Your Time',
@@ -23,7 +38,7 @@ const actions = [
     border: 'border-orange-200',
   },
   {
-    id: 'donate' as ModalType,
+    id: 'donate' as ActionId,
     icon: Heart,
     title: 'Donate',
     subtitle: 'Fund the Change',
@@ -43,7 +58,7 @@ const actions = [
     featured: true,
   },
   {
-    id: 'partner' as ModalType,
+    id: 'partner' as ActionId,
     icon: Handshake,
     title: 'Partner With Us',
     subtitle: 'Institutional Impact',
@@ -62,7 +77,7 @@ const actions = [
     border: 'border-blue-200',
   },
   {
-    id: 'chapter' as ModalType,
+    id: 'chapter' as ActionId,
     icon: Users,
     title: 'Community Action',
     subtitle: 'Local Leadership',
@@ -164,7 +179,7 @@ export default function GetInvolved({ onOpenModal }: GetInvolvedProps) {
                   </button>
                 ) : (
                   <button
-                    onClick={() => onOpenModal(id)}
+                    onClick={() => onOpenModal(id as ModalType)}
                     className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
                   >
                     {cta}
