@@ -47,10 +47,10 @@ function StatCard({ stat, animate }: { stat: Stat; animate: boolean }) {
 }
 
 interface HeroProps {
-  onOpenDonate: () => void;
+  onOpenDonate?: () => void;
 }
 
-export default function Hero({ onOpenDonate }: HeroProps) {
+export default function Hero({ }: HeroProps) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [animate, setAnimate] = useState(false);
 
@@ -116,8 +116,10 @@ export default function Hero({ onOpenDonate }: HeroProps) {
             </a>
             <button
               type="button"
-              onClick={onOpenDonate}
-              className="bg-white text-orange-600 font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 text-base"
+              data-fundraisely-donate=""
+              data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
+              data-title="Donate"
+              className="bg-white text-[#ffa200] font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 text-base"
             >
               Donate
             </button>

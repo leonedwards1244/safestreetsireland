@@ -152,13 +152,25 @@ export default function GetInvolved({ onOpenModal }: GetInvolvedProps) {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => onOpenModal(id)}
-                  className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
-                >
-                  {cta}
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                {id === 'donate' ? (
+                  <button
+                    type="button"
+                    data-fundraisely-donate=""
+                    data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
+                    data-title="Donate"
+                    className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300`}
+                  >
+                    {cta}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => onOpenModal(id)}
+                    className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
+                  >
+                    {cta}
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                )}
               </div>
             ))}
           </div>

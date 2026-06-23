@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -13,7 +13,6 @@ import SupportedBy from './components/SupportedBy';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import { Modal, type ModalType } from './components/ActionModals';
-import DonateModal, { type DonateModalHandle } from './components/DonateModal';
 import { SuccessPage } from './pages/SuccessPage';
 import { CancelPage } from './pages/CancelPage';
 import { LoginPage } from './pages/LoginPage';
@@ -27,22 +26,11 @@ import YouthResourcesPage from './pages/resources/YouthResourcesPage';
 
 function HomePage() {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
-  const donateModalRef = useRef<DonateModalHandle>(null);
-
-  const handleDonate = () => donateModalRef.current?.open();
-
-  const handleOpenModal = (type: ModalType) => {
-    if (type === 'donate') {
-      handleDonate();
-    } else {
-      setActiveModal(type);
-    }
-  };
 
   return (
     <>
-      <Navbar onOpenDonate={handleDonate} />
-      <Hero onOpenDonate={handleDonate} />
+      <Navbar />
+      <Hero />
       <About />
       <TheProblem />
       <MissionVisionValues />
@@ -51,18 +39,14 @@ function HomePage() {
       <Stories />
       <GetInvolved
         activeModal={activeModal}
-        onOpenModal={handleOpenModal}
+        onOpenModal={(type) => { if (type !== 'donate') setActiveModal(type); }}
         onCloseModal={() => setActiveModal(null)}
       />
       <SupportedBy />
       <Newsletter />
       <Footer />
 
-      {activeModal && activeModal !== 'donate' && (
-        <Modal type={activeModal} onClose={() => setActiveModal(null)} />
-      )}
-
-      <DonateModal ref={donateModalRef} />
+      {activeModal && <Modal type={activeModal} onClose={() => setActiveModal(null)} />}
     </>
   );
 }
@@ -86,4 +70,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
