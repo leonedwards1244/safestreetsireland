@@ -46,11 +46,7 @@ function StatCard({ stat, animate }: { stat: Stat; animate: boolean }) {
   );
 }
 
-interface HeroProps {
-  onOpenDonate: () => void;
-}
-
-export default function Hero({ onOpenDonate }: HeroProps) {
+export default function Hero() {
   const gridRef = useRef<HTMLDivElement>(null);
   const [animate, setAnimate] = useState(false);
 
@@ -114,13 +110,14 @@ export default function Hero({ onOpenDonate }: HeroProps) {
             <a href="#get-involved" className="btn-outline text-base">
               Get Involved
             </a>
-            <button
-              type="button"
-              onClick={onOpenDonate}
+            <a
+              href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-white text-[#ffa200] font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 text-base"
             >
               Donate
-            </button>
+            </a>
             <a href="#volunteer" className="btn-outline text-base">
               Volunteer
             </a>
