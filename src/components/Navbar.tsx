@@ -20,10 +20,10 @@ const navLinks = [
 ];
 
 interface NavbarProps {
-  onOpenDonate?: () => void;
+  onOpenDonate: () => void;
 }
 
-export default function Navbar({ }: NavbarProps) {
+export default function Navbar({ onOpenDonate }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -154,9 +154,7 @@ export default function Navbar({ }: NavbarProps) {
             </a>
             <button
               type="button"
-              data-fundraisely-donate=""
-              data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
-              data-title="Donate"
+              onClick={onOpenDonate}
               className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#ffa200] text-white hover:bg-[#e69200] shadow-sm hover:shadow-md transition-all duration-300"
             >
               Donate
@@ -226,10 +224,7 @@ export default function Navbar({ }: NavbarProps) {
             </a>
             <button
               type="button"
-              data-fundraisely-donate=""
-              data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
-              data-title="Donate"
-              onClick={() => setMenuOpen(false)}
+              onClick={() => { setMenuOpen(false); onOpenDonate(); }}
               className="flex-1 text-center btn-primary text-sm py-3"
             >
               Donate

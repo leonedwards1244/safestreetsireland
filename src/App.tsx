@@ -13,6 +13,7 @@ import SupportedBy from './components/SupportedBy';
 import Newsletter from './components/Newsletter';
 import Footer from './components/Footer';
 import { Modal, type ModalType } from './components/ActionModals';
+import DonateModal from './components/DonateModal';
 import EducationalMaterialsPage from './pages/resources/EducationalMaterialsPage';
 import FamilySupportPage from './pages/resources/FamilySupportPage';
 import NewsUpdatesPage from './pages/resources/NewsUpdatesPage';
@@ -21,11 +22,12 @@ import YouthResourcesPage from './pages/resources/YouthResourcesPage';
 
 function HomePage() {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const [donateOpen, setDonateOpen] = useState(false);
 
   return (
     <>
-      <Navbar />
-      <Hero />
+      <Navbar onOpenDonate={() => setDonateOpen(true)} />
+      <Hero onOpenDonate={() => setDonateOpen(true)} />
       <About />
       <TheProblem />
       <MissionVisionValues />
@@ -34,7 +36,10 @@ function HomePage() {
       <Stories />
       <GetInvolved
         activeModal={activeModal}
-        onOpenModal={(type) => { if (type !== 'donate') setActiveModal(type); }}
+        onOpenModal={(type) => {
+          if (type === 'donate') { setDonateOpen(true); return; }
+          setActiveModal(type);
+        }}
         onCloseModal={() => setActiveModal(null)}
       />
       <SupportedBy />
@@ -42,6 +47,7 @@ function HomePage() {
       <Footer />
 
       {activeModal && <Modal type={activeModal} onClose={() => setActiveModal(null)} />}
+      {donateOpen && <DonateModal onClose={() => setDonateOpen(false)} />}
     </>
   );
 }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-type ModalType = 'volunteer' | 'partner' | 'chapter' | null;
+type ModalType = 'volunteer' | 'donate' | 'partner' | 'chapter' | null;
 
 interface FormState {
   loading: boolean;
@@ -250,6 +250,7 @@ function SuccessScreen({ title, message, onClose }: { title: string; message: st
 // ── Modal wrapper ──────────────────────────────────────────────────────────────
 const MODAL_TITLES: Record<NonNullable<ModalType>, string> = {
   volunteer: 'Become a Volunteer',
+  donate:    'Make a Donation',
   partner:   'Partner With Us',
   chapter:   'Start a Chapter',
 };

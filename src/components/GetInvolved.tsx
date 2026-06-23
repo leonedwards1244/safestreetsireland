@@ -2,10 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Heart, HandHeart, Handshake, Users, ArrowRight } from 'lucide-react';
 import { type ModalType } from './ActionModals';
 
-type ActionId = ModalType | 'donate';
-
 const actions: Array<{
-  id: ActionId;
+  id: NonNullable<ModalType>;
   icon: React.ElementType;
   title: string;
   subtitle: string;
@@ -19,7 +17,7 @@ const actions: Array<{
   featured?: boolean;
 }> = [
   {
-    id: 'volunteer' as ActionId,
+    id: 'volunteer',
     icon: HandHeart,
     title: 'Volunteer',
     subtitle: 'Give Your Time',
@@ -38,7 +36,7 @@ const actions: Array<{
     border: 'border-orange-200',
   },
   {
-    id: 'donate' as ActionId,
+    id: 'donate',
     icon: Heart,
     title: 'Donate',
     subtitle: 'Fund the Change',
@@ -58,7 +56,7 @@ const actions: Array<{
     featured: true,
   },
   {
-    id: 'partner' as ActionId,
+    id: 'partner',
     icon: Handshake,
     title: 'Partner With Us',
     subtitle: 'Institutional Impact',
@@ -77,7 +75,7 @@ const actions: Array<{
     border: 'border-blue-200',
   },
   {
-    id: 'chapter' as ActionId,
+    id: 'chapter',
     icon: Users,
     title: 'Community Action',
     subtitle: 'Local Leadership',
@@ -167,25 +165,14 @@ export default function GetInvolved({ onOpenModal }: GetInvolvedProps) {
                   ))}
                 </ul>
 
-                {id === 'donate' ? (
-                  <button
-                    type="button"
-                    data-fundraisely-donate=""
-                    data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
-                    data-title="Donate"
-                    className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300`}
-                  >
-                    {cta}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => onOpenModal(id as ModalType)}
-                    className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
-                  >
-                    {cta}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => onOpenModal(id)}
+                  className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
+                >
+                  {cta}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             ))}
           </div>
