@@ -148,14 +148,15 @@ export default function Navbar() {
             >
               Get Involved
             </a>
-            <a
-              href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              data-fundraisely-donate=""
+              data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
+              data-title="Donate"
               className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#ffa200] text-white hover:bg-[#e69200] shadow-sm hover:shadow-md transition-all duration-300"
             >
               Donate
-            </a>
+            </button>
           </div>
 
           {/* Mobile toggle */}
@@ -219,15 +220,16 @@ export default function Navbar() {
             >
               Get Involved
             </a>
-            <a
-              href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              data-fundraisely-donate=""
+              data-club-id="8fe572df-ef63-4559-9816-d084ad85c314"
+              data-title="Donate"
               onClick={() => setMenuOpen(false)}
               className="flex-1 text-center btn-primary text-sm py-3"
             >
               Donate
-            </a>
+            </button>
           </div>
         </div>
       </div>
