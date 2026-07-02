@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Heart, HandHeart, Handshake, Users, ArrowRight } from 'lucide-react';
 import { type ModalType } from './ActionModals';
+import DonateButton from './DonateButton';
 
 const actions: Array<{
   id: NonNullable<ModalType>;
@@ -166,15 +167,11 @@ export default function GetInvolved({ onOpenModal }: GetInvolvedProps) {
                 </ul>
 
                 {id === 'donate' ? (
-                  <a
-                    href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <DonateButton
                     className={`inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full ${color} text-white hover:opacity-90 hover:shadow-md transition-all duration-300 group`}
                   >
                     {cta}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
+                  </DonateButton>
                 ) : (
                   <button
                     type="button"
