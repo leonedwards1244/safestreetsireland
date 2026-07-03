@@ -91,27 +91,15 @@ function EventCard({
           </div>
         </div>
 
-        {event.id === 'padel-2026' ? (
-          <a
-            href="https://lu.ma/event/evt-d9Yp8hGI1N3P3Gi"
-            className="luma-checkout--button inline-flex items-center gap-2 btn-primary text-sm group/btn"
-            data-luma-action="checkout"
-            data-luma-event-id="evt-d9Yp8hGI1N3P3Gi"
-          >
-            {event.cta}
-            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-          </a>
-        ) : (
-          <a
-            href={event.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 btn-primary text-sm group/btn"
-          >
-            {event.cta}
-            <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-          </a>
-        )}
+        <a
+          href={event.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 btn-primary text-sm group/btn"
+        >
+          {event.cta}
+          <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+        </a>
       </div>
     </div>
   );
