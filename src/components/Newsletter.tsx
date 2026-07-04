@@ -32,7 +32,12 @@ export default function Newsletter() {
     setLoading(false);
 
     if (dbError) {
-      setError('Something went wrong. Please try again.');
+      const msg = dbError.message?.toLowerCase() ?? '';
+      setError(
+        msg.includes('abort') || msg.includes('timeout') || msg.includes('fetch')
+          ? 'Connection timed out. Please check your internet and try again.'
+          : 'Something went wrong. Please try again.'
+      );
       return;
     }
 

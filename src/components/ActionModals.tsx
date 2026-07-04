@@ -2,6 +2,14 @@ import { useState } from 'react';
 import { X, CheckCircle, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
+function dbErrorMessage(error: { message?: string }): string {
+  const msg = error.message?.toLowerCase() ?? '';
+  if (msg.includes('abort') || msg.includes('timeout') || msg.includes('fetch')) {
+    return 'Connection timed out. Please check your internet and try again.';
+  }
+  return 'Something went wrong. Please try again.';
+}
+
 type ModalType = 'volunteer' | 'donate' | 'partner' | 'chapter' | null;
 
 interface FormState {
@@ -37,7 +45,7 @@ function VolunteerForm({ onClose }: { onClose: () => void }) {
       availability: form.availability || null,
       message: form.message.trim() || null,
     });
-    setState({ loading:false, success:!error, error: error ? 'Something went wrong. Please try again.' : null });
+    setState({ loading:false, success:!error, error: error ? dbErrorMessage(error) : null });
   };
 
   if (state.success) return <SuccessScreen title="Application Received!" message="Thank you for volunteering with Safe Streets Ireland. Our team will be in touch soon." onClose={onClose} />;
@@ -102,7 +110,7 @@ function PartnerForm({ onClose }: { onClose: () => void }) {
       org_type: form.org_type as 'business'|'school'|'sports'|'council'|'charity'|'faith'|'other',
       message: form.message.trim() || null,
     });
-    setState({ loading:false, success:!error, error: error ? 'Something went wrong. Please try again.' : null });
+    setState({ loading:false, success:!error, error: error ? dbErrorMessage(error) : null });
   };
 
   if (state.success) return <SuccessScreen title="Partnership Request Received!" message="Thank you for your interest in partnering with Safe Streets Ireland. Our partnerships team will be in touch within 5 working days." onClose={onClose} />;
@@ -164,7 +172,7 @@ function ChapterForm({ onClose }: { onClose: () => void }) {
       county: form.county,
       message: form.message.trim() || null,
     });
-    setState({ loading:false, success:!error, error: error ? 'Something went wrong. Please try again.' : null });
+    setState({ loading:false, success:!error, error: error ? dbErrorMessage(error) : null });
   };
 
   if (state.success) return <SuccessScreen title="Chapter Request Received!" message="Excellent! Thank you for stepping up to lead change in your community. Our team will contact you within 48 hours." onClose={onClose} />;
