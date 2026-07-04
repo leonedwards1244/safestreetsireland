@@ -122,7 +122,7 @@ export default function NewsUpdatesPage() {
           </div>
           <h2 className="text-2xl font-extrabold mb-2">Stay Informed</h2>
           <p className="text-orange-100 mb-5 max-w-md mx-auto">Get our latest updates delivered directly to your inbox. No spam — just the news that matters.</p>
-          <a href="/#newsletter" className="inline-flex items-center gap-2 bg-white text-orange-600 font-bold px-7 py-3 rounded-full hover:bg-orange-50 transition-colors">
+          <a href="/#contact" className="inline-flex items-center gap-2 bg-white text-orange-600 font-bold px-7 py-3 rounded-full hover:bg-orange-50 transition-colors">
             Subscribe to Our Newsletter
           </a>
         </div>

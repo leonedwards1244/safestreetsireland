@@ -17,11 +17,11 @@ const footerLinks: Record<string, { label: string; href: string }[]> = {
     { label: 'Corporate Support', href: '#' },
   ],
   Resources: [
-    { label: 'Youth Resources', href: '/resources/youth' },
-    { label: 'Family Support', href: '/resources/family' },
-    { label: 'Educational Materials', href: '/resources/educational' },
-    { label: 'Research & Data', href: '/resources/research' },
-    { label: 'News & Updates', href: '/resources/news' },
+    { label: 'Youth Resources', href: '/resources/youth-resources' },
+    { label: 'Family Support', href: '/resources/family-support' },
+    { label: 'Educational Materials', href: '/resources/educational-materials' },
+    { label: 'Research & Data', href: '/resources/research-data' },
+    { label: 'News & Updates', href: '/resources/news-updates' },
   ],
   Support: [
     { label: 'Contact Us', href: '#' },
