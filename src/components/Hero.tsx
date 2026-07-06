@@ -62,6 +62,8 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-36 pb-24">
+        {/* Orange decorative orb */}
+        <div className="absolute -top-20 -right-32 w-[520px] h-[520px] rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
         <div className="max-w-3xl">
           {/* Tag */}
           <div
