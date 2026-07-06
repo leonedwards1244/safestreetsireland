@@ -33,17 +33,17 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
 
       {/* ── Top utility bar ───────────────────────────────────────────── */}
-      <div className="bg-charcoal border-b border-orange-500/40">
-        <div className="max-w-7xl mx-auto px-5 h-10 flex items-center justify-between gap-4">
+      <div className="bg-charcoal border-b-2 border-orange-500">
+        <div className="max-w-7xl mx-auto px-5 h-14 flex items-center justify-between gap-4">
 
           {/* Logo + name */}
           <a href="#" className="flex items-center gap-2 group flex-shrink-0">
             <img
               src="/SSI_LOGO_TRANSPARENT.png"
               alt="Safe Streets Ireland"
-              className="h-6 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
+              className="h-8 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
             />
-            <span className="text-white text-xs font-bold tracking-wide group-hover:text-orange-300 transition-colors hidden sm:block">
+            <span className="text-white text-sm font-bold tracking-wide group-hover:text-orange-300 transition-colors hidden sm:block">
               Safe Streets Ireland
             </span>
           </a>
@@ -53,9 +53,9 @@ export default function Navbar() {
             {/* Events pill */}
             <a
               href="#events"
-              className="flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full mr-2 transition-colors duration-200"
+              className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-base font-extrabold px-6 py-2.5 rounded-full mr-3 transition-colors duration-200 shadow-lg shadow-orange-500/30 tracking-wide"
             >
-              <CalendarDays className="w-3 h-3" />
+              <CalendarDays className="w-5 h-5" />
               Events
             </a>
 
