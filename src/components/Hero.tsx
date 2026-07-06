@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Shield, Users, Star } from 'lucide-react';
+import DonateButton from './DonateButton';
 
 const slides = [
   '/SSI_STREETS_WORK.png',
@@ -181,14 +182,9 @@ export default function Hero() {
               <a href="#about" className="btn-outline text-sm backdrop-blur-sm">
                 Learn More
               </a>
-              <a
-                href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#ffa200] hover:bg-[#e69200] text-white font-bold px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-sm shadow-lg shadow-amber-500/25"
-              >
+              <DonateButton className="bg-[#ffa200] hover:bg-[#e69200] text-white font-bold px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-sm shadow-lg shadow-amber-500/25">
                 Donate Now
-              </a>
+              </DonateButton>
             </div>
           </div>
 
