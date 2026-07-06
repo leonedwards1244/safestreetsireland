@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Facebook, Instagram, Linkedin, Youtube, Mail, CalendarDays } from 'lucide-react';
-import DonateButton from './DonateButton';
 
 const topSocials = [
   { icon: Facebook,  label: 'Facebook',  href: 'https://www.facebook.com/profile.php?id=61590416144888' },
@@ -149,9 +148,14 @@ export default function Navbar() {
             >
               Get Involved
             </a>
-            <DonateButton className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#ffa200] text-white hover:bg-[#e69200] shadow-sm hover:shadow-md transition-all duration-300">
+            <a
+              href="https://fundraisely.ie/events/safe-streets-ireland-padel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-bold px-5 py-2.5 rounded-full bg-[#ffa200] text-white hover:bg-[#e69200] shadow-sm hover:shadow-md transition-all duration-300"
+            >
               Donate
-            </DonateButton>
+            </a>
           </div>
 
           {/* Mobile toggle */}
@@ -215,9 +219,15 @@ export default function Navbar() {
             >
               Get Involved
             </a>
-            <DonateButton className="flex-1 text-center btn-primary text-sm py-3">
+            <a
+              href="https://fundraisely.ie/events/safe-streets-ireland-padel"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="flex-1 text-center btn-primary text-sm py-3"
+            >
               Donate
-            </DonateButton>
+            </a>
           </div>
         </div>
       </div>
