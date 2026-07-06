@@ -8,9 +8,9 @@ const slides = [
 ];
 
 const STATS = [
-  { icon: Shield, target: 100, label: 'Communities Reached',             delay: 0   },
-  { icon: Users,  target: 50,  label: 'Volunteers & Families Supported', delay: 150 },
-  { icon: Star,   target: 100, label: 'Followers Accounted',             delay: 300 },
+  { icon: Shield, target: 100, label: 'Communities Reached',             delay: 200 },
+  { icon: Users,  target: 50,  label: 'Volunteers & Families Supported', delay: 380 },
+  { icon: Star,   target: 100, label: 'Followers Accounted',             delay: 560 },
 ];
 
 function easeOutQuart(t: number): number {
@@ -41,7 +41,7 @@ function useCountUp(target: number, duration: number, active: boolean) {
   return count;
 }
 
-interface StatItemProps {
+interface StatCardProps {
   icon: React.ElementType;
   target: number;
   label: string;
@@ -49,26 +49,34 @@ interface StatItemProps {
   active: boolean;
 }
 
-function StatItem({ icon: Icon, target, label, delay, active }: StatItemProps) {
+function StatCard({ icon: Icon, target, label, delay, active }: StatCardProps) {
   const [triggered, setTriggered] = useState(false);
+  const [visible, setVisible] = useState(false);
   const count = useCountUp(target, 1800, triggered);
 
   useEffect(() => {
     if (!active) return;
-    const t = setTimeout(() => setTriggered(true), delay);
-    return () => clearTimeout(t);
+    const t1 = setTimeout(() => setVisible(true), delay);
+    const t2 = setTimeout(() => setTriggered(true), delay);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [active, delay]);
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center flex-shrink-0">
+    <div
+      className={`relative flex items-center gap-4 bg-white/8 backdrop-blur-md border border-white/12 rounded-2xl px-6 py-5 transition-all duration-500
+        ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-6'}`}
+    >
+      {/* Left accent bar */}
+      <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full bg-orange-500" />
+
+      <div className="w-11 h-11 rounded-xl bg-orange-500/15 border border-orange-400/25 flex items-center justify-center flex-shrink-0">
         <Icon className="w-5 h-5 text-orange-400" />
       </div>
       <div>
-        <div className="text-white font-extrabold text-xl leading-none tabular-nums">
+        <div className="text-4xl font-black text-white leading-none tabular-nums tracking-tight">
           {count}<span className="text-orange-400">+</span>
         </div>
-        <div className="text-white/55 text-xs font-medium mt-0.5">{label}</div>
+        <div className="text-white/50 text-xs font-medium mt-1 leading-snug">{label}</div>
       </div>
     </div>
   );
@@ -82,26 +90,12 @@ export default function Hero() {
 
   useEffect(() => {
     setLoaded(true);
+    // Trigger stats shortly after load since they're visible above the fold
+    const t = setTimeout(() => setStatsActive(true), 600);
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const el = statsRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStatsActive(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    return () => { clearTimeout(t); clearInterval(interval); };
   }, []);
 
   return (
@@ -118,107 +112,104 @@ export default function Hero() {
       ))}
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-charcoal/85 via-charcoal/70 to-orange-900/60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-charcoal/90 via-charcoal/75 to-orange-950/70" />
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent" />
 
       {/* Slide indicators */}
-      <div className="absolute bottom-36 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      <div className="absolute bottom-28 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === current ? 'bg-orange-400 w-8' : 'bg-white/40 w-2'
+            className={`h-1 rounded-full transition-all duration-300 ${
+              i === current ? 'bg-orange-400 w-8' : 'bg-white/30 w-2'
             }`}
             aria-label={`Go to slide ${i + 1}`}
           />
         ))}
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-36 pb-24">
-        {/* Orange decorative orb */}
-        <div className="absolute -top-20 -right-32 w-[520px] h-[520px] rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+      {/* Two-column layout */}
+      <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-40 pb-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-        <div className="max-w-3xl">
-          {/* Tag */}
-          <div
-            className={`inline-flex items-center gap-2 bg-orange-500/20 border border-orange-400/40 backdrop-blur-sm text-orange-300 text-sm font-bold px-4 py-2 rounded-full mb-8 transition-all duration-700 ${
-              loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse-slow" />
-            Community-Led Movement
-          </div>
-
-          {/* Headline */}
-          <h1
-            className={`text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-none tracking-tight mb-6 transition-all duration-700 delay-100 ${
-              loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
-          >
-            Safer Streets.
-            <br />
-            <span className="text-orange-400">Stronger</span>
-            <br />
-            Communities.
-          </h1>
-
-          {/* Subtext */}
-          <p
-            className={`text-lg sm:text-xl text-white/75 leading-relaxed max-w-xl mb-10 transition-all duration-700 delay-200 ${
-              loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
-          >
-            Safe Streets Ireland is a grassroots campaign working to reduce youth
-            violence and knife crime — supporting families, empowering young people,
-            and building safer communities across Ireland.
-          </p>
-
-          {/* CTAs */}
-          <div
-            className={`flex flex-wrap gap-4 mb-16 transition-all duration-700 delay-300 ${
-              loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
-          >
-            <a href="#get-involved" className="btn-primary text-base shadow-xl shadow-orange-500/30">
-              Get Involved
-            </a>
-            <a href="#about" className="btn-outline text-base backdrop-blur-sm">
-              Learn More
-            </a>
-            <a
-              href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#ffa200] hover:bg-[#e69200] text-white font-bold px-7 py-3.5 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-base shadow-xl shadow-amber-500/30"
+          {/* ── LEFT: copy ── */}
+          <div>
+            {/* Tag */}
+            <div
+              className={`inline-flex items-center gap-2 bg-orange-500/15 border border-orange-500/30 text-orange-300 text-xs font-bold px-3 py-1.5 rounded-full mb-7 tracking-widest uppercase transition-all duration-700 ${
+                loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
             >
-              Donate Now
-            </a>
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse-slow" />
+              Community-Led Movement
+            </div>
+
+            {/* Headline — smaller, monolithic */}
+            <h1
+              className={`text-4xl sm:text-5xl font-black text-white leading-tight tracking-tight mb-5 transition-all duration-700 delay-100 ${
+                loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+            >
+              Safer Streets.
+              <br />
+              <span className="text-orange-400">Stronger</span>
+              <br />
+              Communities.
+            </h1>
+
+            {/* Subtext — tighter and smaller */}
+            <p
+              className={`text-sm text-white/60 leading-relaxed max-w-md mb-10 transition-all duration-700 delay-200 ${
+                loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+            >
+              Safe Streets Ireland is a grassroots campaign working to reduce youth
+              violence and knife crime — supporting families, empowering young people,
+              and building safer communities across Ireland.
+            </p>
+
+            {/* CTAs */}
+            <div
+              className={`flex flex-wrap gap-3 transition-all duration-700 delay-300 ${
+                loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+            >
+              <a href="#get-involved" className="btn-primary text-sm shadow-lg shadow-orange-500/25">
+                Get Involved
+              </a>
+              <a href="#about" className="btn-outline text-sm backdrop-blur-sm">
+                Learn More
+              </a>
+              <a
+                href="https://fundraisely.ie/embed/donate/8fe572df-ef63-4559-9816-d084ad85c314"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#ffa200] hover:bg-[#e69200] text-white font-bold px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-sm shadow-lg shadow-amber-500/25"
+              >
+                Donate Now
+              </a>
+            </div>
           </div>
 
-          {/* Stats — count-up animation */}
-          <div
-            ref={statsRef}
-            className={`flex flex-wrap gap-8 transition-all duration-700 delay-500 ${
-              loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
-          >
+          {/* ── RIGHT: stats ── */}
+          <div ref={statsRef} className="flex flex-col gap-4">
             {STATS.map((stat) => (
-              <StatItem key={stat.label} {...stat} active={statsActive} />
+              <StatCard key={stat.label} {...stat} active={statsActive} />
             ))}
           </div>
+
         </div>
       </div>
 
       {/* Scroll indicator */}
       <a
         href="#about"
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white/50 hover:text-white transition-colors group"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white/40 hover:text-white/70 transition-colors"
         aria-label="Scroll down"
       >
         <span className="text-xs font-semibold tracking-widest uppercase">Scroll</span>
-        <ArrowDown className="w-5 h-5 animate-scroll-bounce" />
+        <ArrowDown className="w-4 h-4 animate-scroll-bounce" />
       </a>
     </section>
   );
