@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { ArrowDown, Shield, Users, Heart } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, Shield, Users, Star } from 'lucide-react';
 
 const slides = [
   '/SSI_STREETS_WORK.png',
@@ -7,15 +7,78 @@ const slides = [
   '/ChatGPT_Image_Jun_11,_2026,_07_56_00_PM.png',
 ];
 
-const stats = [
-  { icon: Shield, value: '100+', label: 'Communities Reached' },
-  { icon: Users, value: '500+', label: 'Volunteers' },
-  { icon: Heart, value: '1,000+', label: 'Families Supported' },
+const STATS = [
+  { icon: Shield, target: 100, label: 'Communities Reached',             delay: 0   },
+  { icon: Users,  target: 50,  label: 'Volunteers & Families Supported', delay: 150 },
+  { icon: Star,   target: 100, label: 'Followers Accounted',             delay: 300 },
 ];
+
+function easeOutQuart(t: number): number {
+  return 1 - Math.pow(1 - t, 4);
+}
+
+function useCountUp(target: number, duration: number, active: boolean) {
+  const [count, setCount] = useState(0);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!active) return;
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      setCount(Math.floor(easeOutQuart(progress) * target));
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        setCount(target);
+      }
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [active, target, duration]);
+
+  return count;
+}
+
+interface StatItemProps {
+  icon: React.ElementType;
+  target: number;
+  label: string;
+  delay: number;
+  active: boolean;
+}
+
+function StatItem({ icon: Icon, target, label, delay, active }: StatItemProps) {
+  const [triggered, setTriggered] = useState(false);
+  const count = useCountUp(target, 1800, triggered);
+
+  useEffect(() => {
+    if (!active) return;
+    const t = setTimeout(() => setTriggered(true), delay);
+    return () => clearTimeout(t);
+  }, [active, delay]);
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center flex-shrink-0">
+        <Icon className="w-5 h-5 text-orange-400" />
+      </div>
+      <div>
+        <div className="text-white font-extrabold text-xl leading-none tabular-nums">
+          {count}<span className="text-orange-400">+</span>
+        </div>
+        <div className="text-white/55 text-xs font-medium mt-0.5">{label}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const [loaded, setLoaded] = useState(false);
+  const [statsActive, setStatsActive] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setLoaded(true);
@@ -23,6 +86,22 @@ export default function Hero() {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStatsActive(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -34,15 +113,11 @@ export default function Hero() {
           className="absolute inset-0 transition-opacity duration-1000"
           style={{ opacity: i === current ? 1 : 0 }}
         >
-          <img
-            src={src}
-            alt=""
-            className="w-full h-full object-cover"
-          />
+          <img src={src} alt="" className="w-full h-full object-cover" />
         </div>
       ))}
 
-      {/* Overlay */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-charcoal/85 via-charcoal/70 to-orange-900/60" />
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent" />
 
@@ -64,6 +139,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-36 pb-24">
         {/* Orange decorative orb */}
         <div className="absolute -top-20 -right-32 w-[520px] h-[520px] rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
+
         <div className="max-w-3xl">
           {/* Tag */}
           <div
@@ -121,22 +197,15 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Stats */}
+          {/* Stats — count-up animation */}
           <div
+            ref={statsRef}
             className={`flex flex-wrap gap-8 transition-all duration-700 delay-500 ${
               loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
           >
-            {stats.map(({ icon: Icon, value, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-5 h-5 text-orange-400" />
-                </div>
-                <div>
-                  <div className="text-white font-extrabold text-xl leading-none">{value}</div>
-                  <div className="text-white/55 text-xs font-medium mt-0.5">{label}</div>
-                </div>
-              </div>
+            {STATS.map((stat) => (
+              <StatItem key={stat.label} {...stat} active={statsActive} />
             ))}
           </div>
         </div>

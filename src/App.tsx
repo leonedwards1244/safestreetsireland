@@ -6,7 +6,6 @@ import About from './components/About';
 import TheProblem from './components/TheProblem';
 import MissionVisionValues from './components/MissionVisionValues';
 import ImpactBanner from './components/ImpactBanner';
-import StatsImpact from './components/StatsImpact';
 import Events from './components/Events';
 import Stories from './components/Stories';
 import GetInvolved from './components/GetInvolved';
@@ -30,7 +29,6 @@ function HomePage() {
       <About />
       <TheProblem />
       <MissionVisionValues />
-      <StatsImpact />
       <ImpactBanner />
       <Events />
       <Stories />
