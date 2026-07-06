@@ -22,7 +22,8 @@ export default function DonateButton({ children = 'Donate Now', className }: Don
       type="button"
       data-fundraisely-donate=""
       data-club-id={CLUB_ID}
-      className={className}
+      data-title="Donate"
+      className={`donate-glow ${className ?? ''}`}
     >
       {children}
     </button>
