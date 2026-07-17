@@ -96,6 +96,12 @@ const supporters: Supporter[] = [
     logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Kerry_Group_logo.svg/320px-Kerry_Group_logo.svg.png',
     websiteUrl: 'https://www.kerrygroup.com',
   },
+  {
+    id: 'fundraisely',
+    name: 'RundRaisely',
+    logoUrl: '/fundraisely.png',
+    websiteUrl: 'https://fundraisely.ie/',
+  },
 ];
 
 function SupporterTile({ supporter }: { supporter: Supporter }) {

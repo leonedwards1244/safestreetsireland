@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Calendar, MapPin, ExternalLink, ArrowRight, Trophy } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Trophy } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const events = [
   {
@@ -14,7 +15,7 @@ const events = [
     location: 'Ireland',
     image:
       'https://images.pexels.com/photos/8007094/pexels-photo-8007094.jpeg?auto=compress&cs=tinysrgb&w=800',
-    href: 'https://fundraisely.ie/events/safe-streets-ireland-padel',
+    href: '/events/safe-streets-ireland-padel#tickets',
     cta: 'Register & Donate',
     featured: true,
   },
@@ -91,15 +92,13 @@ function EventCard({
           </div>
         </div>
 
-        <a
-          href={event.href}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={event.href}
           className="inline-flex items-center gap-2 btn-primary text-sm group/btn"
         >
           {event.cta}
-          <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
-        </a>
+          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+        </Link>
       </div>
     </div>
   );
