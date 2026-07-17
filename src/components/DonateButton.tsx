@@ -1,32 +1,14 @@
-// src/components/DonateButton.tsx
-//
-// Drop-in replacement for the old:
-//   <a href="https://fundraisely.ie/embed/donate/<clubId>" target="_blank">
-//
-// Renders the real FundRaisely embed trigger -- a <button
-// data-fundraisely-donate data-club-id="..."> -- and makes sure
-// donate.js is loaded so that button actually does something. See
-// src/lib/fundraisely.ts for why the script is loaded this way instead
-// of a plain <script> tag in index.html.
-//
-// Usage is just like a normal button -- pass whatever className and
-// children you need to match the surrounding design:
-//
-//   <DonateButton className="btn-primary">Donate Now</DonateButton>
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { loadDonateScript, FUNDRAISELY_CLUB_ID } from '../lib/fundraisely';
 
 interface DonateButtonProps {
   className?: string;
   children: React.ReactNode;
-  /** Sets data-title, which donate.js uses as the modal's heading. */
   title?: string;
-  /** Optional extra handler -- e.g. closing a mobile nav menu on click.
-   *  This fires alongside (not instead of) donate.js's own click
-   *  handler, since they're two separate listeners on the same button. */
   onClick?: () => void;
 }
+
+const DONATE_DIRECT_URL = `https://fundraisely.ie/embed/donate/${FUNDRAISELY_CLUB_ID}`;
 
 export default function DonateButton({
   className = '',
@@ -34,11 +16,27 @@ export default function DonateButton({
   title = 'Donate',
   onClick,
 }: DonateButtonProps) {
+  const [authorized, setAuthorized] = useState<boolean | null>(null);
+
   useEffect(() => {
-    // Fire-and-forget: any load failure is logged, not thrown, so a
-    // network hiccup on this script can't crash the rest of the page.
-    loadDonateScript().catch((err) => console.error(err));
+    let cancelled = false;
+    loadDonateScript()
+      .then(() => checkDomainAllowed())
+      .then((allowed) => !cancelled && setAuthorized(allowed))
+      .catch(() => !cancelled && setAuthorized(false));
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  function handleClick() {
+    onClick?.();
+    if (authorized === false) {
+      window.open(DONATE_DIRECT_URL, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  const disabled = authorized === false;
 
   return (
     <button
@@ -47,9 +45,22 @@ export default function DonateButton({
       data-club-id={FUNDRAISELY_CLUB_ID}
       data-title={title}
       className={className}
-      onClick={onClick}
+      onClick={handleClick}
+      style={disabled ? { opacity: 1, cursor: 'pointer' } : undefined}
     >
       {children}
     </button>
   );
+}
+
+async function checkDomainAllowed(): Promise<boolean> {
+  try {
+    const res = await fetch(
+      `https://fundraisely.ie/api/donations/${FUNDRAISELY_CLUB_ID}/domain-check?hostname=${encodeURIComponent(window.location.hostname)}`,
+    );
+    const data = await res.json();
+    return !!(data && data.allowed);
+  } catch {
+    return false;
+  }
 }

@@ -1212,26 +1212,49 @@ function TicketPanelBody({ ticketBuyUrl }: { ticketBuyUrl: string }) {
   return (
     <>
       {/*
-        This iframe points at the same TicketEmbedPage/TicketPurchaseFlow
-        that runs on fundraisely.ie itself (mode="embedded") -- the
-        ticket-selection, buyer-details, and confirmation steps all render
-        inside it directly. Only the card-payment step still opens a new
-        tab for Stripe (a cross-origin iframe navigating itself to
-        checkout.stripe.com is blocked by the browser, the same
-        restriction we hit with donations), everything else stays put.
+        The FundRaisely ticket iframe (/embed/tickets/<roomId>) is
+        domain-locked: it only renders the ticket flow on hostnames the
+        club has registered (localhost and safestreetsireland.com).
+        On every other host — including this preview — it returns the
+        FundRaisely homepage, so we link straight to the live ticket
+        page instead. The iframe is still rendered on authorized hosts
+        via the <TicketEmbed /> component below; here we always show the
+        direct-link card so the page works everywhere.
       */}
-      <div className="min-w-0 overflow-hidden rounded-[1.75rem] border border-[#e5d4c2] bg-white shadow-sm">
-        <iframe
-          src={`https://fundraisely.ie/embed/tickets/${ROOM_ID}`}
-          title="Buy Safe Streets Ireland padel tickets"
-          className="block w-full border-0"
-          style={{ height: 720 }}
-          allow="payment"
-        />
-      </div>
-
+      <TicketEmbed roomId={ROOM_ID} />
       <DirectTicketLinkCard ticketBuyUrl={ticketBuyUrl} />
     </>
+  );
+}
+
+function TicketEmbed({ roomId }: { roomId: string }) {
+  const [authorized, setAuthorized] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    fetch(
+      `https://fundraisely.ie/api/quiz/tickets/room/${roomId}/domain-check?hostname=${encodeURIComponent(window.location.hostname)}`,
+    )
+      .then((res) => res.json())
+      .then((data) => !cancelled && setAuthorized(!!(data && data.allowed)))
+      .catch(() => !cancelled && setAuthorized(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [roomId]);
+
+  if (authorized !== true) return null;
+
+  return (
+    <div className="min-w-0 overflow-hidden rounded-[1.75rem] border border-[#e5d4c2] bg-white shadow-sm">
+      <iframe
+        src={`https://fundraisely.ie/embed/tickets/${roomId}`}
+        title="Buy Safe Streets Ireland padel tickets"
+        className="block w-full border-0"
+        style={{ height: 720 }}
+        allow="payment"
+      />
+    </div>
   );
 }
 
