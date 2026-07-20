@@ -19,6 +19,21 @@ const events = [
     cta: 'Register & Donate',
     featured: true,
   },
+  {
+    id: 'boxing-2026',
+    tag: 'Fundraiser',
+    tagColor: 'bg-charcoal',
+    category: 'Boxing Tournament',
+    title: 'Safe Streets Ireland — Boxing Fundraiser',
+    description:
+      'Step into the ring for safer streets. A boxing tournament in support of Safe Streets Ireland — date, venue and ticket details to be announced. Follow along or donate today to support the campaign.',
+    date: 'TBA',
+    location: 'Ireland',
+    image: '/images/events/AA13AD4F-A151-4B32-8694-6154F53E32F5.PNG',
+    href: '/events/safe-streets-ireland-boxing',
+    cta: 'Coming Soon',
+    featured: false,
+  },
 ];
 
 function EventCard({

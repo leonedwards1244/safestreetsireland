@@ -19,6 +19,7 @@ import NewsUpdatesPage from './pages/resources/NewsUpdatesPage';
 import ResearchDataPage from './pages/resources/ResearchDataPage';
 import YouthResourcesPage from './pages/resources/YouthResourcesPage';
 import SafeStreetsIrelandPadelPage from './pages/events/SafeStreetsIrelandPadelPage';
+import SafeStreetsIrelandBoxingPage from './pages/events/SafeStreetsIrelandBoxingPage';
 
 function HomePage() {
   const [activeModal, setActiveModal] = useState<ModalType>(null);
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="/resources/research-data" element={<ResearchDataPage />} />
         <Route path="/resources/youth-resources" element={<YouthResourcesPage />} />
         <Route path="/events/safe-streets-ireland-padel" element={<SafeStreetsIrelandPadelPage />} />
+        <Route path="/events/safe-streets-ireland-boxing" element={<SafeStreetsIrelandBoxingPage />} />
       </Routes>
     </BrowserRouter>
   );
