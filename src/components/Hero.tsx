@@ -11,7 +11,7 @@ const slides = [
 const STATS = [
   { icon: Shield, target: 100, label: 'Communities Reached',             delay: 200 },
   { icon: Users,  target: 50,  label: 'Volunteers & Families Supported', delay: 380 },
-  { icon: Star,   target: 100, label: 'Followers Accounted',             delay: 560 },
+  { icon: Star,   target: 250, label: 'Followers Accounted',             delay: 560 },
 ];
 
 function easeOutQuart(t: number): number {
