@@ -132,9 +132,9 @@ export default function Footer() {
             <a href="#" className="hover:text-gray-300 transition-colors">Terms of Use</a>
           </div>
           <div className="flex items-center gap-3 text-xs text-gray-500">
-            <span>Registered Charity</span>
+            <span>Registered Individual Charity</span>
             <span className="w-1 h-1 rounded-full bg-gray-600" />
-            <span>CHY 12345</span>
+            <span>CHY 165536</span>
             <button
               onClick={scrollToTop}
               className="ml-3 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-orange-500 transition-colors duration-200"
