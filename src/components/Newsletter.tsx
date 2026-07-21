@@ -62,7 +62,7 @@ export default function Newsletter() {
 
             <div className="space-y-5 mb-10">
               {[
-                { icon: Mail, label: 'info@safestreetsireland.ie' },
+                { icon: Mail, label: 'info@safestreetsire.online' },
                 { icon: Phone, label: '+353 1 29 74 3396 ' },
                 { icon: MapPin, label: 'Dublin — Ireland' },
               ].map(({ icon: Icon, label }) => (
